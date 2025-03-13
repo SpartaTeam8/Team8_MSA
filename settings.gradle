@@ -1,0 +1,6 @@
+rootProject.name = 'Team8_MSA'
+
+include 'common'
+include 'config-service'
+include 'eureka-service'
+include 'gateway-service'
