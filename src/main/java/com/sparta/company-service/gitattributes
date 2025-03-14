@@ -1,0 +1,13 @@
+# 텍스트 파일의 줄바꿈 통일 (Windows, Mac, Linux 간 차이 해결)
+* text=auto
+
+# Gradle Wrapper 파일은 바이너리로 처리
+gradlew binary
+gradlew.bat binary
+
+# 특정 파일 타입을 LF(Line Feed)로 강제 변환
+*.sh text eol=lf
+*.java text eol=lf
+*.kt text eol=lf
+*.yml text eol=lf
+*.md text eol=lf

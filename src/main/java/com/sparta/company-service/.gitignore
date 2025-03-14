@@ -1,0 +1,39 @@
+# IntelliJ 관련 파일 제외
+../../../../../../.idea/
+*.iml
+
+# VS Code 관련 파일 제외
+.vscode/
+
+# Gradle Wrapper 유지 (필수 파일만 포함)
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+
+
+# Maven 빌드 결과 제외
+target/
+.mvn/
+
+# Eclipse / STS 관련 파일 제외
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# 환경설정 파일 제외 (보안 이슈 방지)
+*.env
+application-*.yml
+application-*.properties
+
+# OS별 불필요한 파일 제외
+.DS_Store
+Thumbs.db
+
