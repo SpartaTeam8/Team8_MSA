@@ -1,4 +1,4 @@
-package com.sparta.productservice.domain.repository;
+package com.teamsparta8.productservice.domain.repository;
 
 public class ProductRepository {
 }
