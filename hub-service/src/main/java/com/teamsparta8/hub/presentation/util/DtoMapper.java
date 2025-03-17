@@ -3,14 +3,17 @@ package com.teamsparta8.hub.presentation.util;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.teamsparta8.hub.application.dto.HubCreateInternalDto;
 import com.teamsparta8.hub.application.dto.HubInternalDto;
-import com.teamsparta8.hub.presentation.dto.HubDto;
+import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
+import com.teamsparta8.hub.presentation.dto.hub.HubCreateDto;
+import com.teamsparta8.hub.presentation.dto.hub.HubResponseDto;
 
 public class DtoMapper {
 
-	public static HubInternalDto.Create convertToCreateInternalDto(HubDto.Create create) {
+	public static HubCreateInternalDto convertToCreateInternalDto(HubCreateDto create) {
 
-		return HubInternalDto.Create.builder()
+		return HubCreateInternalDto.builder()
 			.hubName(create.getHubName())
 			.hubAddress(create.getHubAddress())
 			.longitude(create.getLongitude())
@@ -18,9 +21,9 @@ public class DtoMapper {
 			.build();
 	}
 
-	public static HubDto.Response convertToResponse(HubInternalDto.Response response) {
+	public static HubResponseDto convertToResponse(HubResponseInternalDto response) {
 
-		return HubDto.Response.builder()
+		return HubResponseDto.builder()
 			.hubId(response.getHubId())
 			.hubName(response.getHubName())
 			.hubAddress(response.getHubAddress())
@@ -29,7 +32,7 @@ public class DtoMapper {
 			.build();
 	}
 
-	public static List<HubDto.Response> convertToReponseList(List<HubInternalDto.Response> responses) {
+	public static List<HubResponseDto> convertToReponseList(List<HubResponseInternalDto> responses) {
 
 		return responses.stream()
 			.map(DtoMapper::convertToResponse)

@@ -12,9 +12,7 @@ public class HubInternalDto {
 
 	@Getter
 	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class Create {
+	public static class All {
 		private String hubName;
 		private String hubAddress;
 		private BigDecimal longitude;
@@ -23,9 +21,7 @@ public class HubInternalDto {
 
 	@Getter
 	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class UpdateAddress {
+	public static class Address {
 		private String hubAddress;
 		private BigDecimal longitude;
 		private BigDecimal latitude;
@@ -33,11 +29,7 @@ public class HubInternalDto {
 
 	@Getter
 	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class Response {
-		private UUID hubId;
-		private String hubName;
+	public static class Name {
 		private String hubAddress;
 		private BigDecimal longitude;
 		private BigDecimal latitude;
