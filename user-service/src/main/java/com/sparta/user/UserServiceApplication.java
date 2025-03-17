@@ -1,4 +1,4 @@
-package com.sparta.userservice;
+package com.sparta.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

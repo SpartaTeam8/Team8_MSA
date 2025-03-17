@@ -1,12 +1,11 @@
-package com.sparta.userservice.controller.dto;
+package com.sparta.user.presentation.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
+@Builder
 @Getter
 @RequiredArgsConstructor
-@Builder
+@AllArgsConstructor
 public class CommonResponse<T> {
     private String resultCode;
     private String message;

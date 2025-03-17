@@ -4,12 +4,12 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/users
-    username: thisuser
+    username: this user
     password: dj
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.postgresSQLDialect
+    database-platform: org.hibernate.dialect.PostgresSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true

@@ -1,4 +1,4 @@
-package com.sparta.userservice.enumtype;
+package com.sparta.user.domain.enumtype;
 
 import lombok.Getter;
 
@@ -10,7 +10,6 @@ public enum Role {
     HUB(Authority.HUB, 3),
     MASTER(Authority.MASTER, 4);
 
-    //
     private final String authority;
     private final int level;
 

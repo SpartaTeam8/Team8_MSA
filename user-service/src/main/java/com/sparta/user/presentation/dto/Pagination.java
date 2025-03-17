@@ -1,4 +1,4 @@
-package com.sparta.userservice.controller.dto;
+package com.sparta.user.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

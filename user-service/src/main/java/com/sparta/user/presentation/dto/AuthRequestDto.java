@@ -1,7 +1,7 @@
-package com.sparta.userservice.controller.dto;
+package com.sparta.user.presentation.dto;
 
 
-import com.sparta.userservice.enumtype.Role;
+import com.sparta.user.domain.enumtype.Role;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;

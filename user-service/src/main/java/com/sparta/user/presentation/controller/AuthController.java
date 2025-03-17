@@ -1,9 +1,9 @@
-package com.sparta.userservice.controller;
+package com.sparta.user.presentation.controller;
 
-import com.sparta.userservice.controller.dto.AuthRequestDto;
-import com.sparta.userservice.controller.dto.AuthResponseDto;
-import com.sparta.userservice.controller.dto.CommonResponse;
-import com.sparta.userservice.service.UserService;
+import com.sparta.user.presentation.dto.AuthRequestDto;
+import com.sparta.user.presentation.dto.AuthResponseDto;
+import com.sparta.user.presentation.dto.CommonResponse;
+import com.sparta.user.application.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     // 회원가입
     @PostMapping("/sign-up")
@@ -29,12 +29,13 @@ public class AuthController {
         raiseValidationException(bindingResult);
 
         // 예외가 없다면 회원가입시작
-        AuthResponseDto authResponseDto = userService.signup(authRequestDto);
+        AuthResponseDto authResponseDto = authService.signup(authRequestDto);
 
         return ResponseEntity
                 .created(URI.create("/user/" + authResponseDto.getUserId()))
                 .body(CommonResponse.OK(authResponseDto,"201"));
     }
+
 
 
 
