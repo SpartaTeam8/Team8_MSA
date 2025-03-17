@@ -1,4 +1,4 @@
-package com.teamsparta8.hub.entity;
+package com.teamsparta8.hub.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "p_hub_route")
-public class HubRoute {
+public class HubRoute extends BaseEntity {
 
 	@Id
 	@Column(updatable = false)
