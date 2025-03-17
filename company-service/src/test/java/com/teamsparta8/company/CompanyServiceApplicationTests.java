@@ -1,9 +1,13 @@
-package com.sparta.companyservice;
+package com.teamsparta8.company;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest  // 스프링 컨텍스트를 로드하여 테스트 실행
+@TestPropertySource(properties = {
+    "eureka.client.enabled=false"  // 테스트 시 Eureka Client 비활성화
+})
 public class CompanyServiceApplicationTests {
 
   @Test

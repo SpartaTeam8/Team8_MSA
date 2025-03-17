@@ -29,9 +29,10 @@ ext {
 
 dependencies {
     // Spring Boot 기본 설정
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter'
 
     // PostgreSQL 설정 (DB 연결)
     implementation 'org.postgresql:postgresql'
@@ -57,4 +58,12 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.register('wrapper', Wrapper) {
+    gradleVersion = '8.10'
+}
+
+tasks.named('bootJar') {
+    mainClass.set('com.teamsparta8.company.CompanyServiceApplication')
 }
