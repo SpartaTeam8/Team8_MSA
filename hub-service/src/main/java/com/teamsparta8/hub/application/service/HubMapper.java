@@ -1,18 +1,28 @@
 package com.teamsparta8.hub.application.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
-import com.teamsparta8.hub.application.dto.HubInternalDto;
+import com.teamsparta8.hub.application.dto.HubCreateInternalDto;
+import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
 import com.teamsparta8.hub.domain.model.Hub;
 
 @Mapper(componentModel = "spring")
 public interface HubMapper {
 
-	Hub createToHub(HubInternalDto.Create request);
+	Hub createToHub(HubCreateInternalDto request);
 
-	HubInternalDto.Response hubToResponse(Hub hub);
+	HubResponseInternalDto hubToResponse(Hub hub);
 
-	List<HubInternalDto.Response> hubListToResponse(List<Hub> hubList);
+	default Page<HubResponseInternalDto> hubListToResponse(Page<Hub> hubList){
+		List<HubResponseInternalDto> hubResponseDtoList = hubList.getContent().stream()
+			.map(this::hubToResponse)
+			.collect(Collectors.toList());
+
+		return new PageImpl<>(hubResponseDtoList, hubList.getPageable(), hubList.getTotalElements());
+	}
 }

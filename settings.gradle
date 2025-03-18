@@ -7,3 +7,4 @@ include 'gateway-service'
 include 'company-service'
 project(':company-service').projectDir = file('company-service')
 include 'order-service'
+include 'hub-service'
