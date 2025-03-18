@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users
+    username: this user
+    password: dj
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgresSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 19091
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:19090/eureka
