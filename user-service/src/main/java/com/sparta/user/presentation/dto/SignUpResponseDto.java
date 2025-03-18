@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class AuthResponseDto {
+public class SignUpResponseDto {
     UUID userId;
 }
