@@ -20,16 +20,25 @@ public class HubRepositoryImpl implements HubRepository {
 
 	@Override
 	public void save(Hub hub) {
+
 		jpaHubRepository.save(hub);
 	}
 
 	@Override
 	public Optional<Hub> findById(UUID hubId) {
+
 		return jpaHubRepository.findById(hubId);
 	}
 
 	@Override
 	public Page<Hub> findAll(Pageable pageable) {
+
 		return jpaHubRepository.findAll(pageable);
+	}
+
+	@Override
+	public boolean existsByHubNameAndHubAddress(String hubName, String hubAddress) {
+
+		return jpaHubRepository.existsByHubNameAndHubAddress(hubName, hubAddress);
 	}
 }
