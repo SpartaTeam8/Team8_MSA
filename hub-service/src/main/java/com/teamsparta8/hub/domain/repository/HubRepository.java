@@ -14,4 +14,6 @@ public interface HubRepository {
 	Optional<Hub> findById(UUID hubId);
 
 	Page<Hub> findAll(Pageable pageable);
+
+	boolean existsByHubNameAndHubAddress(String hubName, String hubAddress);
 }

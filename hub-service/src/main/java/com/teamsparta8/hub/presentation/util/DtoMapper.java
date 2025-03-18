@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.teamsparta8.hub.application.dto.HubCreateInternalDto;
-import com.teamsparta8.hub.application.dto.HubInternalDto;
 import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
+import com.teamsparta8.hub.application.dto.HubUpdateInternalDto;
 import com.teamsparta8.hub.presentation.dto.hub.HubCreateDto;
 import com.teamsparta8.hub.presentation.dto.hub.HubResponseDto;
+import com.teamsparta8.hub.presentation.dto.hub.HubUpdateDto;
 
 public class DtoMapper {
 
@@ -18,6 +19,15 @@ public class DtoMapper {
 			.hubAddress(create.getHubAddress())
 			.longitude(create.getLongitude())
 			.latitude(create.getLatitude())
+			.build();
+	}
+
+	public static HubUpdateInternalDto convertToUpdateInternalDto(HubUpdateDto update) {
+		return HubUpdateInternalDto.builder()
+			.hubName(update.getHubName())
+			.hubAddress(update.getHubAddress())
+			.longitude(update.getLongitude())
+			.latitude(update.getLatitude())
 			.build();
 	}
 
