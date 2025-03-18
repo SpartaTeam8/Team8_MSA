@@ -27,7 +27,7 @@ public class Order extends BaseEntity {
 	private UUID orderId;
 
 	@Column(nullable = false)
-	private UUID supplierCompanyId;
+	private UUID supplierCompanyId; //업체 담당자 조회 필터링 가능
 
 	@Column(nullable = false)
 	private UUID receiverCompanyId;
@@ -36,10 +36,10 @@ public class Order extends BaseEntity {
 	private UUID productId;
 
 	@Column
-	private UUID hubId;
+	private UUID hubId; //허브 관리자 조회 필터링 가능
 
 	@Column
-	private UUID deliveryId;
+	private UUID deliveryId; //배송 담당자 조회 필터링 가능
 
 	@Column(nullable = false)
 	private int quantity;
