@@ -23,12 +23,10 @@ public class OrderService {
 	private final OrderMapper orderMapper;
 	@Transactional
 	public CreateOrderResponse createOrder(CreateOrderRequest request) {
-		UUID orderId = UUID.randomUUID();
 		UUID hubId = UUID.randomUUID();
 		UUID deliveryId = UUID.randomUUID();
 		// 도메인 서비스 호출 (비즈니스 로직 위임)
 		Order order = orderDomainService.createOrder(
-			orderId,
 			request.getSupplierCompanyId(),
 			request.getReceiverCompanyId(),
 			request.getProductId(),
