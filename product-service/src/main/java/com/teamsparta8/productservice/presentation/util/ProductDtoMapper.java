@@ -1,5 +1,7 @@
 package com.teamsparta8.productservice.presentation.util;
 
+import org.springframework.data.domain.Page;
+
 import com.teamsparta8.productservice.application.dtos.ProductCreateInternalDto;
 import com.teamsparta8.productservice.application.dtos.ProductResponseInternalDto;
 import com.teamsparta8.productservice.application.dtos.ProductUpdateInternalDto;
@@ -33,5 +35,9 @@ public class ProductDtoMapper {
 			.price(response.getPrice())
 			.isDeleted(response.isDeleted())
 			.build();
+	}
+
+	public static Page<ProductResponseDto> convertToResponseList(Page<ProductResponseInternalDto> productList) {
+		return productList.map(ProductDtoMapper::convertToResponseDto);
 	}
 }
