@@ -6,12 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.teamsparta8.order_service.presentatin.dto.CommonResponse;
 import com.teamsparta8.order_service.presentatin.dto.CreateOrderRequest;
 import com.teamsparta8.order_service.presentatin.dto.CreateOrderResponse;
 import com.teamsparta8.order_service.application.dto.OrderMapper;
 import com.teamsparta8.order_service.domain.model.Order;
 import com.teamsparta8.order_service.domain.repository.OrderRepository;
 import com.teamsparta8.order_service.domain.service.OrderDomainService;
+import com.teamsparta8.order_service.presentatin.dto.UpdateOrderRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,18 @@ public class OrderService {
 		orderRepository.save(order); //JPA에서 persist()가 실행되도록 보장
 
 		return orderMapper.fromEntity(order);
+	}
+
+	@Transactional
+	public CreateOrderResponse updateOrder(UUID orderId, UpdateOrderRequest request) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(() -> new RuntimeException("주문을 찾을 수 없습니다."));
+
+		Order updatedOrder = orderDomainService.updateOrder(order, request.getQuantity(), request.getRequestDescription());
+
+		orderRepository.save(updatedOrder);
+
+		return orderMapper.fromEntity(updatedOrder);
 	}
 
 	public Page<CreateOrderResponse> getAllOrders(int page, int size) {

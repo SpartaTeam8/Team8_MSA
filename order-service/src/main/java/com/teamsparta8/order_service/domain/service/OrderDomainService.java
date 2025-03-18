@@ -39,12 +39,12 @@ public class OrderDomainService {
 	}
 
 	public Order updateOrder(Order order, int quantity, String requestDescription) {
-		// quantity 검증
+		//  수량 검증
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
 		}
 
-		// 변경 사항 적용 후 새로운 Order 객체 생성 (불변 객체 유지)
+		//  변경된 데이터 반영 (불변성 유지)
 		return Order.builder()
 			.orderId(order.getOrderId())
 			.supplierCompanyId(order.getSupplierCompanyId())
@@ -56,5 +56,4 @@ public class OrderDomainService {
 			.requestDescription(requestDescription)
 			.build();
 	}
-
 }

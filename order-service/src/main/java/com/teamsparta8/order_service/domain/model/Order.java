@@ -26,8 +26,6 @@ public class Order extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID orderId;
 
-	@Version // 낙관적 락 적용
-	private Long version;
 	@Column(nullable = false)
 	private UUID supplierCompanyId;
 

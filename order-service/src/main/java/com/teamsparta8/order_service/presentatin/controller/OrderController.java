@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import com.teamsparta8.order_service.presentatin.dto.CreateOrderResponse;
 import com.teamsparta8.order_service.application.service.OrderService;
 import com.teamsparta8.order_service.presentatin.dto.CommonResponse;
 import com.teamsparta8.order_service.presentatin.dto.Pagination;
+import com.teamsparta8.order_service.presentatin.dto.UpdateOrderRequest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,15 @@ public class OrderController {
 		CreateOrderResponse response = orderService.createOrder(request);
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(CommonResponse.OK(response, "주문이 성공적으로 생성되었습니다."));
+	}
+	//  주문 수정
+	@PutMapping("/{orderId}")
+	public ResponseEntity<CommonResponse<CreateOrderResponse>> updateOrder(
+		@PathVariable UUID orderId,
+		@RequestBody @Valid UpdateOrderRequest request
+	) {
+		CreateOrderResponse response = orderService.updateOrder(orderId, request);
+		return ResponseEntity.ok(CommonResponse.OK(response, "주문이 성공적으로 수정되었습니다."));
 	}
 
 
