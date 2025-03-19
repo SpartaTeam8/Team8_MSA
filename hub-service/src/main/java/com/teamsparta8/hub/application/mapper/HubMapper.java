@@ -1,4 +1,4 @@
-package com.teamsparta8.hub.application.service;
+package com.teamsparta8.hub.application.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ public interface HubMapper {
 
 	HubResponseInternalDto hubToResponse(Hub hub);
 
-	default Page<HubResponseInternalDto> hubListToResponse(Page<Hub> hubList){
+	default Page<HubResponseInternalDto> hubPageToResponse(Page<Hub> hubList){
 		List<HubResponseInternalDto> hubResponseDtoList = hubList.getContent().stream()
 			.map(this::hubToResponse)
 			.collect(Collectors.toList());
