@@ -2,6 +2,7 @@ package com.sparta.user.application.service;
 
 import com.sparta.user.domain.model.User;
 import com.sparta.user.infrastructure.repository.UserRepository;
+import com.sparta.user.presentation.dto.UserGetResponseDto;
 import com.sparta.user.presentation.dto.UserUpdateRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,12 @@ public class UserService {
         user.delete(LocalDateTime.now(), user.getUsername());
 
         return "유저정보가 삭제되었습니다.";
+    }
+
+    public UserGetResponseDto getUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
+
+        return new UserGetResponseDto(user.getUserId(), user.getUsername(), user.getEmail());
     }
 }
