@@ -25,7 +25,8 @@ public class Order extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID orderId;
-
+	@Column(nullable = false)
+	private UUID userId; // 주문을 생성한 사용자 ID 추가
 	@Column(nullable = false)
 	private UUID supplierCompanyId; //업체 담당자 조회 필터링 가능
 

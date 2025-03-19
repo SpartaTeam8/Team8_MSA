@@ -99,5 +99,14 @@ public class OrderService {
 		orderRepository.deleteById(orderId);
 	}
 
+	@Transactional(readOnly = true)
+	public OrderPageResponse searchOrders(UUID userId, UUID hubId, UUID deliveryId, String status, int page, int size) {
+		QueryResults<Order> queryResults = orderQueryRepository.searchOrders(userId, hubId, deliveryId, status, page, size);
+		List<CreateOrderResponse> response = PaginationUtil.mapResults(queryResults, orderMapper::fromEntity);
+		Pagination pagination = PaginationUtil.createPagination(queryResults, page, size);
+		return new OrderPageResponse(response, pagination);
+	}
+
+
 
 }

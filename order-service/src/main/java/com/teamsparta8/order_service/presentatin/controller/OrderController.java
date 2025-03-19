@@ -110,5 +110,19 @@ public class OrderController {
 		orderService.deleteOrder(orderId);
 		return ResponseEntity.ok(CommonResponse.OK("주문이 삭제되었습니다."));
 	}
-
+	// 주문 검색 API (다양한 조건 조합 가능)
+	@GetMapping("/search")
+	public ResponseEntity<CommonResponse<List<CreateOrderResponse>>> searchOrders(
+		@RequestParam(required = false) UUID userId,
+		@RequestParam(required = false) UUID hubId,
+		@RequestParam(required = false) UUID deliveryId,
+		@RequestParam(required = false) String status,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		OrderPageResponse orderPageResponse = orderService.searchOrders(userId, hubId, deliveryId, status, page, size);
+		return ResponseEntity.ok(
+			CommonResponse.OK(orderPageResponse.getOrders(), "주문 검색 결과 조회 성공", orderPageResponse.getPagination())
+		);
+	}
 }
