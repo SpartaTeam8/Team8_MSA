@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductRequestDto {
+public class ProductCreateInternalDto { // 잠시만유
 
 	private UUID companyId;
+	private UUID hubId;
 	private String productName;
 	private int price;
 	private boolean isDeleted;
