@@ -1,6 +1,7 @@
 package com.sparta.user.domain.model;
 
 import com.sparta.user.domain.enumtype.Role;
+import com.sparta.user.presentation.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    private UUID userId;
+    private Long userId;
 
     @Column(nullable = false)
     private String username;
@@ -37,10 +38,9 @@ public class User extends BaseEntity {
         return user;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (userId == null) {
-            userId = UUID.randomUUID();
-        }
+    public static void update(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        if (userUpdateRequestDto.getUsername() != null) { user.username = userUpdateRequestDto.getUsername(); }
+        if (userUpdateRequestDto.getPassword() != null){ user.password = userUpdateRequestDto.getPassword(); }
+        if (userUpdateRequestDto.getEmail() != null){ user.email = userUpdateRequestDto.getEmail();}
     }
 }
