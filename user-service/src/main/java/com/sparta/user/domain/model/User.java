@@ -3,6 +3,7 @@ package com.sparta.user.domain.model;
 import com.sparta.user.domain.enumtype.Role;
 import com.sparta.user.presentation.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -43,4 +44,5 @@ public class User extends BaseEntity {
         if (userUpdateRequestDto.getPassword() != null){ user.password = userUpdateRequestDto.getPassword(); }
         if (userUpdateRequestDto.getEmail() != null){ user.email = userUpdateRequestDto.getEmail();}
     }
+
 }

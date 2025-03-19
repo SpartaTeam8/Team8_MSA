@@ -21,4 +21,10 @@ public class UserController {
         return ResponseEntity.ok(CommonResponse.OK(message,"201"));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable Long id){
+        String message = userService.deleteUser(id);
+
+        return ResponseEntity.ok(CommonResponse.OK(message,"201"));
+    }
 }
