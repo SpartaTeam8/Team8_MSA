@@ -11,9 +11,8 @@ import com.teamsparta8.order_service.presentatin.dto.CreateOrderResponse;
 @Component
 public class OrderMapper {
 	// DTO → Entity 변환
-	public Order toEntity(CreateOrderRequest request, UUID orderId, UUID hubId, UUID deliveryId) {
+	public Order toEntity(CreateOrderRequest request,UUID hubId, UUID deliveryId) {
 		return Order.builder()
-			.orderId(orderId)
 			.supplierCompanyId(request.getSupplierCompanyId())
 			.receiverCompanyId(request.getReceiverCompanyId())
 			.productId(request.getProductId())
