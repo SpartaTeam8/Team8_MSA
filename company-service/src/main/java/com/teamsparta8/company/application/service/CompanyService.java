@@ -3,7 +3,18 @@ package com.teamsparta8.company.application.service;
 import com.teamsparta8.company.application.dto.CompanyRequestDto;
 import com.teamsparta8.company.application.dto.CompanyResponseDto;
 import com.teamsparta8.company.domain.entity.Company;
+import com.teamsparta8.company.domain.model.CompanyType;
+import com.teamsparta8.company.domain.repository.CompanyRepository;
+import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +46,31 @@ public class CompanyService {
     companyRepository.save(company);
 
     return new CompanyResponseDto(company);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<CompanyResponseDto> searchCompanies(String name, CompanyType type, Long hubId, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+    Specification<Company> spec = (root, query, criteriaBuilder) -> {
+      List<Predicate> predicates = new ArrayList<>();
+
+      if (name != null && !name.isBlank()) {
+        predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+      }
+
+      if (type != null) {
+        predicates.add(criteriaBuilder.equal(root.get("type"), type));
+      }
+
+      if (hubId != null) {
+        predicates.add(criteriaBuilder.equal(root.get("hub").get("id"), hubId));
+      }
+
+      return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    };
+
+    Page<Company> companies = companyRepository.findAll(spec, pageable);
+    return companies.map(CompanyResponseDto::new);
   }
 }
