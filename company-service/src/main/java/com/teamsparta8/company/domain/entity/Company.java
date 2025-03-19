@@ -1,6 +1,7 @@
 package com.teamsparta8.company.domain.entity;
 
 
+import com.teamsparta8.company.domain.model.CompanyType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,8 +9,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +23,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
+@Table(name = "companies")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE company SET deleted_at = NOW() WHERE id = ?")  // 논리 삭제
 @Where(clause = "deleted_at IS NULL")  // 활성 데이터만 조회
 public class Company {
