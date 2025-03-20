@@ -1,22 +1,18 @@
 package com.teamsparta8.company.domain.entity;
 
 
+import com.teamsparta8.company.application.dto.CompanyRequestDto;
 import com.teamsparta8.company.domain.model.CompanyType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.hc.core5.reactor.IOSession.Status;
+import com.teamsparta8.company.domain.model.CompanyStatus;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
@@ -43,7 +39,7 @@ public class Company {
   private CompanyType type; // 업체 유형 ('PRODUCER', 'CONSUMER')
 
   @Column(nullable = false)
-  private Long hubId; // 허브 ID (허브 서비스와 연동)
+  private UUID hubId; // 허브 ID (허브 서비스와 연동)
 
   @Column(nullable = false)
   private String address; // 주소
@@ -74,13 +70,16 @@ public class Company {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private Status status = Status.ACTIVE; // 활성화 상태 ('active', 'inactive')
+  private CompanyStatus status = CompanyStatus.ACTIVE;
 
+  //CompanyRequestDto를 받는 생성자 추가
   @Builder
-  public Company(String name, CompanyType type, String address, String contactName,
-      String contactEmail, String contactPhone, String businessRegistrationNumber) {
+  public Company(String name, CompanyType type, UUID hubId, String address,
+      String contactName, String contactEmail, String contactPhone,
+      String businessRegistrationNumber) {
     this.name = name;
     this.type = type;
+    this.hubId = hubId;
     this.address = address;
     this.contactName = contactName;
     this.contactEmail = contactEmail;
@@ -88,9 +87,30 @@ public class Company {
     this.businessRegistrationNumber = businessRegistrationNumber;
     this.createdAt = LocalDateTime.now();
     this.updatedAt = LocalDateTime.now();
-    this.status = Status.ACTIVE;
+    this.status = CompanyStatus.ACTIVE;
   }
 
+
+
+
+
+  // DTO 기반 생성자 추가
+  public Company(CompanyRequestDto dto) {
+    this.name = dto.getName();
+    this.type = dto.getType();
+    this.hubId = dto.getHubId();
+    this.address = dto.getAddress();
+    this.contactName = dto.getContactName();
+    this.contactEmail = dto.getContactEmail();
+    this.contactPhone = dto.getContactPhone();
+    this.businessRegistrationNumber = dto.getBusinessRegistrationNumber();
+    this.createdAt = LocalDateTime.now();
+    this.updatedAt = LocalDateTime.now();
+    this.status = CompanyStatus.ACTIVE;
+  }
+
+
+  // 회사 정보 업데이트 메서드
   public void updateCompany(String name, String address, String contactName,
       String contactEmail, String contactPhone, CompanyType type) {
     this.name = name;
@@ -102,9 +122,13 @@ public class Company {
     this.updatedAt = LocalDateTime.now();
   }
 
+
+  //회사 비활성화 메서드
   public void deactivate(Long userId) {
-    this.status = Status.INACTIVE;
+    this.status = CompanyStatus.INACTIVE;
     this.deletedAt = LocalDateTime.now();
     this.deletedBy = userId;
   }
+
+
 }

@@ -1,14 +1,15 @@
 package com.teamsparta8.company.application.service;
 
+import com.teamsparta8.company.application.client.HubServiceClient;
 import com.teamsparta8.company.application.dto.CompanyRequestDto;
 import com.teamsparta8.company.application.dto.CompanyResponseDto;
 import com.teamsparta8.company.domain.entity.Company;
 import com.teamsparta8.company.domain.model.CompanyType;
 import com.teamsparta8.company.domain.repository.CompanyRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,9 +27,10 @@ public class CompanyService {
 
   @Transactional
   public CompanyResponseDto createCompany(CompanyRequestDto requestDto) {
-    // 허브 존재 여부 검증
-    boolean hubExists = hubServiceClient.checkHubExists(requestDto.getHubId());
-    if (!hubExists) {
+    // 허브 존재 여부 검증(HubResponseDto가 반환되면 존재하는 것으로 간주)
+    try {
+      hubServiceClient.getHubById(requestDto.getHubId());
+    } catch (Exception e) {
       throw new IllegalArgumentException("해당 허브가 존재하지 않습니다: " + requestDto.getHubId());
     }
 
