@@ -20,6 +20,12 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
+
+        if(path.startsWith("/api/auth")){
+            return chain.filter(exchange);
+        }
+
         ServerHttpRequest request = exchange.getRequest();
 
         // 1️⃣ Authorization 헤더 확인
@@ -36,7 +42,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         token = token.replace("Bearer ", ""); // "Bearer " 부분 제거
 
         // 3️⃣ JWT 검증
-        if (!jwtTokenProvider.validateToken(token)) {
+        if (!jwtTokenProvider.validateToken(token)  ) {
             return onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
         }
 
