@@ -8,5 +8,5 @@ import java.util.UUID;
 @Getter
 @Builder
 public class SignUpResponseDto {
-    UUID userId;
+    Long userId;
 }

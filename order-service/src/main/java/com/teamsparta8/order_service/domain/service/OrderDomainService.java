@@ -14,7 +14,6 @@ public class OrderDomainService {
 
 	// 주문 생성 시 비즈니스 규칙 적용
 	public Order createOrder(
-		UUID orderId,
 		UUID supplierCompanyId,
 		UUID receiverCompanyId,
 		UUID productId,
@@ -29,12 +28,30 @@ public class OrderDomainService {
 		}
 
 		return Order.builder()
-			.orderId(orderId)
 			.supplierCompanyId(supplierCompanyId)
 			.receiverCompanyId(receiverCompanyId)
 			.productId(productId)
 			.hubId(hubId)
 			.deliveryId(deliveryId)
+			.quantity(quantity)
+			.requestDescription(requestDescription)
+			.build();
+	}
+
+	public Order updateOrder(Order order, int quantity, String requestDescription) {
+		//  수량 검증
+		if (quantity <= 0) {
+			throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+		}
+
+		//  변경된 데이터 반영 (불변성 유지)
+		return Order.builder()
+			.orderId(order.getOrderId())
+			.supplierCompanyId(order.getSupplierCompanyId())
+			.receiverCompanyId(order.getReceiverCompanyId())
+			.productId(order.getProductId())
+			.hubId(order.getHubId())
+			.deliveryId(order.getDeliveryId())
 			.quantity(quantity)
 			.requestDescription(requestDescription)
 			.build();

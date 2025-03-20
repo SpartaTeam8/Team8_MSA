@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: product-service
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${POSTGRES_PRODUCT_DB}
+    username: ${POSTGRES_PRODUCT_USER}
+    password: ${POSTGRES_PRODUCT_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+server:
+  port: 8090
+

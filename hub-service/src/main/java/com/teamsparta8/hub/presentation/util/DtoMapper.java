@@ -1,14 +1,21 @@
 package com.teamsparta8.hub.presentation.util;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.teamsparta8.hub.application.dto.HubCreateInternalDto;
 import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
+import com.teamsparta8.hub.application.dto.HubRouteCreateInternalDto;
+import com.teamsparta8.hub.application.dto.HubRouteResponseInternalDto;
+import com.teamsparta8.hub.application.dto.HubRouteUpdateInternalDto;
 import com.teamsparta8.hub.application.dto.HubUpdateInternalDto;
 import com.teamsparta8.hub.presentation.dto.hub.HubCreateDto;
 import com.teamsparta8.hub.presentation.dto.hub.HubResponseDto;
 import com.teamsparta8.hub.presentation.dto.hub.HubUpdateDto;
+import com.teamsparta8.hub.presentation.dto.hubroute.HubRouteCreateDto;
+import com.teamsparta8.hub.presentation.dto.hubroute.HubRouteResponseDto;
+import com.teamsparta8.hub.presentation.dto.hubroute.HubRouteUpdateDto;
 
 public class DtoMapper {
 
@@ -22,12 +29,31 @@ public class DtoMapper {
 			.build();
 	}
 
+	public static HubRouteCreateInternalDto convertToCreateInternalDto(HubRouteCreateDto route) {
+
+		return HubRouteCreateInternalDto.builder()
+			.departureHubId(route.getDepartureHubId())
+			.arrivalHubId(route.getArrivalHubId())
+			.timeTaken(route.getTimeTaken())
+			.distance(route.getDistance())
+			.build();
+	}
+
 	public static HubUpdateInternalDto convertToUpdateInternalDto(HubUpdateDto update) {
 		return HubUpdateInternalDto.builder()
 			.hubName(update.getHubName())
 			.hubAddress(update.getHubAddress())
 			.longitude(update.getLongitude())
 			.latitude(update.getLatitude())
+			.build();
+	}
+
+	public static HubRouteUpdateInternalDto convertToUpdateInternalDto(HubRouteUpdateDto update) {
+		return HubRouteUpdateInternalDto.builder()
+			.departureHubId(update.getDepartureHubId())
+			.arrivalHubId(update.getArrivalHubId())
+			.timeTaken(update.getTimeTaken())
+			.distance(update.getDistance())
 			.build();
 	}
 
@@ -42,10 +68,21 @@ public class DtoMapper {
 			.build();
 	}
 
-	public static List<HubResponseDto> convertToReponseList(List<HubResponseInternalDto> responses) {
+	public static HubRouteResponseDto convertToResponse(HubRouteResponseInternalDto response) {
+
+		return HubRouteResponseDto.builder()
+			.hubRouteId(response.getHubRouteId())
+			.departureHubId(response.getDepartureHubId())
+			.arrivalHubId(response.getArrivalHubId())
+			.timeTaken(response.getTimeTaken())
+			.distance(response.getDistance())
+			.build();
+	}
+
+	public static <T,R> List<R> convertToReponseList(List<T> responses, Function<T,R> mapper) {
 
 		return responses.stream()
-			.map(DtoMapper::convertToResponse)
+			.map(mapper)
 			.collect(Collectors.toList());
 	}
 }

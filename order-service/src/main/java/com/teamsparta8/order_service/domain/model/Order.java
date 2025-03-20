@@ -23,12 +23,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE) //직접호출 방지(Builder만 사용)
 public class Order extends BaseEntity {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID orderId;
-
-	@Version // 낙관적 락 적용
-	private Long version;
 	@Column(nullable = false)
-	private UUID supplierCompanyId;
+	private UUID userId; // 주문을 생성한 사용자 ID 추가
+	@Column(nullable = false)
+	private UUID supplierCompanyId; //업체 담당자 조회 필터링 가능
 
 	@Column(nullable = false)
 	private UUID receiverCompanyId;
@@ -36,15 +36,24 @@ public class Order extends BaseEntity {
 	@Column(nullable = false)
 	private UUID productId;
 
-	@Column(nullable = false)
-	private UUID hubId;
+	@Column
+	private UUID hubId; //허브 관리자 조회 필터링 가능
 
-	@Column(nullable = false)
-	private UUID deliveryId;
+	@Column
+	private UUID deliveryId; //배송 담당자 조회 필터링 가능
 
 	@Column(nullable = false)
 	private int quantity;
 
 	@Column(length = 255)
 	private String requestDescription;
+
+	public void updateHubId(UUID hubId) {
+		this.hubId = hubId;
+	}
+
+	public void updateDeliveryId(UUID deliveryId) {
+		this.deliveryId = deliveryId;
+	}
+
 }
