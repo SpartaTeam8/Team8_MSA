@@ -11,7 +11,7 @@ import com.teamsparta8.stock_service.domain.service.StockDomainService;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockResponse;
 import com.teamsparta8.stock_service.presentation.dto.DecreaseStockRequest;
-import com.teamsparta8.stock_service.presentation.dto.UpdateStockRequest;
+import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class StockService {
 	private final StockDomainService stockDomainService;
 	// private final ProductClient productClient;
 	private final StockMapper stockMapper;
-
+	private static final int DUMMY_PRICE = 10000;
 
 	//재고 생성
 	@Transactional
@@ -33,67 +33,50 @@ public class StockService {
 		// if (product == null) {
 		// 	throw new IllegalArgumentException("존재하지 않는 상품입니다.");
 		// }
-
+		// UUID huubId = prodcut.getHubId();
 		UUID dummyHubId = UUID.randomUUID();
-		int dummyPrice = 10000;
 
 		//  ProductService에서 받은 hubId 사용
-		Stock stock = Stock.builder()
-			.productId(request.getProductId())
-			.hubId(dummyHubId) //  ProductService에서 가져온 hubId 대신 더미데이터
-			.quantity(request.getQuantity())
-			.build();
+		Stock stock = stockDomainService.createStock(request.getProductId(), dummyHubId, request.getQuantity());
 
 		return stockMapper.fromEntity(stock);
 	}
 
-	//재고 차감
 	@Transactional
-	public int decreaseStock(DecreaseStockRequest request) {
-		// ProductService에서 상품 정보 가져오기
-		// ProductResponse product = productClient.getProductDetails(request.getProductId());
-		//
-		// if (product == null) {
-		// 	throw new IllegalArgumentException("존재하지 않는 상품입니다.");
-		// }
-		//
-		// // 상품의 hubId와 요청한 hubId가 일치하는지 검증
-		// if (!product.getHubId().equals(request.getHubId())) {
-		// 	throw new IllegalArgumentException("해당 상품은 이 허브에서 관리되지 않습니다.");
-		// }
-		UUID dummyHubId = UUID.randomUUID();
-		int dummyPrice = 10000;
-		// 해당 허브의 재고 차감
-		Stock stock = stockDomainService.findStockByProductAndHub(request.getProductId(), dummyHubId);
+	public StockCheckResponse checkAndDecreaseStock(DecreaseStockRequest request){
+		// `productId` 기반으로 hubId 포함한 Stock 조회 (StockDomainService 호출)
+		Stock stock = stockDomainService.findStockByProduct(request.getProductId());
+
+		// 재고 확인 (StockDomainService에서 비즈니스 로직 수행)
+		stockDomainService.validateStock(stock, request.getQuantity());
+
+		// 재고 차감 (StockDomainService에서 처리)
 		stockDomainService.decreaseStock(stock, request.getQuantity());
 
-		// 상품 가격 조회
-		// int price = productClient.getProductPrice(request.getProductId());
-		// if (price <= 0) {
-		// 	throw new RuntimeException("상품 가격을 조회할 수 없습니다.");
-		// }
+		// Stock 테이블에서 가격 가져오기
+		int price = stock.getPrice();
 
-		return dummyPrice;
+		// 차감된 재고 정보 반환
+		return StockCheckResponse.builder()
+			.productId(stock.getProductId())
+			.hubId(stock.getHubId()) // StockDomainService에서 조회한 hubId
+			.price(price)
+			.build();
 	}
-
 	//재고 조회
 	@Transactional(readOnly = true)
 	public CreateStockResponse getStockByProductId(UUID productId) {
-		Stock stock = stockDomainService.findStockByProductAndHub(productId, UUID.randomUUID());
+		Stock stock = stockDomainService.findStockByProduct(productId);
 		return stockMapper.fromEntity(stock);
 	}
 
 	@Transactional
-	public UpdateStockResponse updateStock(UpdateStockRequest request) {
-		Stock stock = stockDomainService.findStockByProductAndHub(request.getStockId(), request.getHubId());
-		stockDomainService.updateStock(stock, request.getNewQuantity());
-		return UpdateStockResponse.builder()
-			.stockId(stock.getStockId())
-			.hubId(stock.getHubId())
-			.productId(stock.getProductId())
-			.updatedQuantity(stock.getQuantity())
-			.build();
+	public UpdateStockResponse updateStock(UUID productId, UUID hubId, int newQuantity) {
+		// 도메인 서비스 호출 (재고 조회 및 수정)
+		Stock stock = stockDomainService.updateStockByProductAndHub(productId, hubId, newQuantity);
+		return stockMapper.toUpdateResponse(stock);
 	}
+
 
 	@Transactional
 	public void deleteStock(UUID stockId) {

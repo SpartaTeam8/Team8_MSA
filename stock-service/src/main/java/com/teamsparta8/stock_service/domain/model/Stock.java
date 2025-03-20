@@ -33,6 +33,8 @@ public class Stock extends BaseEntity{
 
 	@Column(nullable = false)
 	private int quantity;
+	@Column(nullable = false) // ✅ 가격 필드 추가
+	private int price;
 
 	public void decreaseStock(int amount) {
 		if (this.quantity < amount) {

@@ -3,16 +3,17 @@ package com.teamsparta8.stock_service.presentation.dto;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-//orderservice -> stockservice로 보내는 데이터
+//stockservice -> orderservice 반환하는 데이터
 @Getter
-@Setter
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class DecreaseStockRequest {
+@NoArgsConstructor
+public class StockCheckResponse {
 	private UUID productId;
-	private int quantity;
+	private UUID hubId;
+	private int price;
 }

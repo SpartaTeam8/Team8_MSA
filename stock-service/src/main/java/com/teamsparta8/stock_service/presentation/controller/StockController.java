@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teamsparta8.stock_service.application.service.StockService;
@@ -18,13 +19,13 @@ import com.teamsparta8.stock_service.presentation.dto.CommonResponse;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockResponse;
 import com.teamsparta8.stock_service.presentation.dto.DecreaseStockRequest;
-import com.teamsparta8.stock_service.presentation.dto.UpdateStockRequest;
+import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/stock")
+@RequestMapping("/api/stocks")
 @RequiredArgsConstructor
 public class StockController {
 
@@ -44,20 +45,26 @@ public class StockController {
 		return ResponseEntity.ok(CommonResponse.OK(response, "재고 조회 성공"));
 	}
 
-	// 재고 차감
-	@PutMapping("/decrease")
-	public ResponseEntity<CommonResponse<Integer>> decreaseStock(@RequestBody DecreaseStockRequest request) {
-		int price = stockService.decreaseStock(request);
-		return ResponseEntity.ok(CommonResponse.OK(price, "재고 차감 성공"));
+	//재고차감
+	@PutMapping("/check")
+	public ResponseEntity<CommonResponse<StockCheckResponse>> checkAndDecreaseStock(
+		@RequestBody DecreaseStockRequest request) { //@RequestBody 사용
+
+		StockCheckResponse response = stockService.checkAndDecreaseStock(request);
+		return ResponseEntity.ok(CommonResponse.OK(response, "재고 확인 및 차감 성공"));
 	}
+
 
 	// 재고 업데이트
-	@PutMapping("/update")
-	public ResponseEntity<CommonResponse<UpdateStockResponse>> updateStock(@RequestBody UpdateStockRequest request) {
-		UpdateStockResponse response = stockService.updateStock(request);
+	@PutMapping("/{productId}")
+	public ResponseEntity<CommonResponse<UpdateStockResponse>> updateStock(
+		@PathVariable UUID productId,
+		@RequestParam UUID hubId,
+		@RequestParam int newQuantity) {
+
+		UpdateStockResponse response = stockService.updateStock(productId, hubId, newQuantity);
 		return ResponseEntity.ok(CommonResponse.OK(response, "재고 수정 성공"));
 	}
-
 	//재고 삭제
 	@DeleteMapping("/{stockId}")
 	public ResponseEntity<CommonResponse<Void>> deleteStock(@PathVariable UUID stockId) {

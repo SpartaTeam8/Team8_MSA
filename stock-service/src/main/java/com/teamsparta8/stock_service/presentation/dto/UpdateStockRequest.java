@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateStockRequest {
 	private UUID stockId;
-	private UUID hubId;
 
 	private int newQuantity;
 }
