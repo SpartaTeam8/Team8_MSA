@@ -4,6 +4,8 @@ import static com.teamsparta8.productservice.domain.entity.QProduct.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,7 +29,8 @@ public class ProductQueryDslRepositoryImpl implements ProductQueryDslRepository 
 
 	private static final int DEFAULT_SIZE = 10;
 	private static final List<Integer> ALLOWED_PAGE_SIZES = Arrays.asList(10, 30, 50);
-
+	
+	//모든 상품 조회
 	@Override
 	public Page<Product> getProductSearch(String keyword, Pageable pageable, SortBy sortBy) {
 		int pageSize = validatePageSize(pageable.getPageSize());
@@ -55,6 +58,50 @@ public class ProductQueryDslRepositoryImpl implements ProductQueryDslRepository 
 
 		//List<Product>와 totalCount를 기반으로 Page<Product> 생성
 		return new PageImpl<>(products, pageable, totalCount);
+	}
+	
+	//허브 담당자 상품 조회
+	@Override
+	public Page<Product> getProductSearchForHub(String keyword, Pageable pageable, SortBy sortBy, UUID hubId) {
+		int pageSize = validatePageSize(pageable.getPageSize());
+
+		//허브 ID에 맞는 상품만 조회
+		List<Product> products = queryFactory
+			.selectFrom(product)
+			.where(
+				getTitleLike(product.productName, keyword)
+					.and(product.isDeleted.eq(false))
+					.and(product.hubId.eq(hubId))
+			)
+			.orderBy(getOrderSpecifier(sortBy))
+			.offset(pageable.getOffset())
+			.limit(pageSize)
+			.fetch();
+
+		// 총 상품 개수 조회
+		long totalCount = queryFactory
+			.selectFrom(product)
+			.where(
+				getTitleLike(product.productName, keyword)
+					.and(product.isDeleted.eq(false))
+					.and(product.hubId.eq(hubId))
+			)
+			.fetchCount();
+
+		return new PageImpl<>(products, pageable, totalCount);
+	}
+
+	@Override
+	public Optional<Product> findByProductId(UUID productId) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(product)
+				.where(
+					product.productId.eq(productId),
+					product.isDeleted.eq(false)
+				)
+				.fetchOne()
+		);
 	}
 
 	//페이지 사이즈 검증

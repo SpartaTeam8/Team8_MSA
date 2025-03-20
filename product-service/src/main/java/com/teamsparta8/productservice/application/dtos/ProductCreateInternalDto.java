@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductCreateInternalDto { // 잠시만유
+public class ProductCreateInternalDto {
 
 	private UUID companyId;
 	private UUID hubId;

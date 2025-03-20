@@ -1,0 +1,47 @@
+### CREATE PRODUCT
+POST http://localhost:8090/api/products
+Content-Type: application/json
+X-Request-ID: f4d9d8a1-5c7f-47fb-99cf-6b0d42c4f6d8
+
+{
+  "productName" : "고사양 게이밍 노트북22",
+  "price" : 3000000
+}
+
+
+### CREATE MASTER PRODUCT
+POST http://localhost:8090/api/products/master
+Content-Type: application/json
+X-Request-ID: f4d9d8a1-5c7f-47fb-99cf-6b0d42c4f6d8
+
+{
+  "companyId" : "284dd4e5-d5f7-4a17-b565-e9c6ac85a452",
+  "productName" : "마스터가 등록한 꼬북칩33",
+  "price" : 3000
+}
+
+
+### UPDATE PRODUCT
+PUT http://localhost:8090/api/products/f30be23c-2e20-4843-bccd-c202302ccfb8
+Content-Type: application/json
+
+{
+  "productName" : "마스터가 등록한 꼬북칩 수정한다 수정했다",
+  "price" : 6000
+}
+
+
+### DELETE PRODUCT
+DELETE http://localhost:8090/api/products/ff96ea71-9326-452a-acb9-a64fd4f88221
+Content-Type: application/json
+
+
+### GET PRODUCT DETAILS
+GET http://localhost:8090/api/products/efe437cd-ee65-48cf-8a2d-35aa17e4241f
+Content-Type: application/json
+
+
+### GET PRODUCT SEARCH
+#GET http://localhost:8090/api/products?keyword=삼양&page=1&size=30&sort=MODIFIED
+GET http://localhost:8090/api/products?keyword=&page=1&size=30&sort=MODIFIED
+Content-Type: application/json
