@@ -23,6 +23,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         String path = exchange.getRequest().getURI().getPath();
 
         if(path.startsWith("/api/auth")){
+            System.out.println("✅ 인증이 필요 없는 경로이므로 필터 통과");
             return chain.filter(exchange);
         }
 
@@ -30,23 +31,29 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
         // 1️⃣ Authorization 헤더 확인
         if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+            System.out.println("❌ Authorization 헤더가 없습니다.");
             return onError(exchange, "Missing Authorization Header", HttpStatus.UNAUTHORIZED);
         }
 
         // 2️⃣ Bearer 토큰 추출
         String token = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        System.out.println("✅ Authorization 헤더 값: " + token);
         if (token == null || !token.startsWith("Bearer ")) {
+            System.out.println("❌ Authorization 헤더 형식이 잘못되었습니다.");
             return onError(exchange, "Invalid Authorization Header", HttpStatus.UNAUTHORIZED);
         }
 
         token = token.replace("Bearer ", ""); // "Bearer " 부분 제거
+        System.out.println("✅ 추출된 JWT 토큰: " + token);
 
         // 3️⃣ JWT 검증
         if (!jwtTokenProvider.validateToken(token)  ) {
+            System.out.println("❌ JWT 토큰 검증 실패");
             return onError(exchange, "Invalid JWT Token", HttpStatus.UNAUTHORIZED);
         }
 
         // 4️⃣ 요청을 그대로 다음 필터로 전달
+        System.out.println("✅ JWT 검증 성공");
         return chain.filter(exchange);
     }
 

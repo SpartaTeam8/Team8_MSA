@@ -15,8 +15,9 @@ public class GatewaySecurityConfig {
                 .authorizeExchange(exchange ->
                         exchange
                                 .pathMatchers("/api/auth/sign-up", "/api/auth/sign-in").permitAll()  // /public/** 경로는 인증 없이 접근 허용
-                                .anyExchange().authenticated()
+                                .anyExchange().permitAll()
                 );
+
 
         return http.build();
     }
