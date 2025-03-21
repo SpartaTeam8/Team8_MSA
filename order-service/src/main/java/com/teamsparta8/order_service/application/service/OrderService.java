@@ -158,6 +158,18 @@ public class OrderService {
 
 	@Transactional
 	public void deleteOrder(UUID orderId) {
+		// 1. 기존 주문 조회
+		Order existingOrder = orderDomainService.getOrderById(orderId);
+
+		try {
+			// 2. 주문 수량만큼 재고 복원
+			rollbackStock(existingOrder.getProductId(), existingOrder.getQuantity());
+		} catch (Exception e) {
+			log.error("주문 삭제 중 재고 복구 실패", e);
+			throw new RuntimeException("재고 복구 실패로 주문 삭제 불가: " + e.getMessage());
+		}
+
+		// 3. 실제 주문 삭제
 		orderDomainService.deleteOrder(orderId);
 	}
 	//목록 조회
