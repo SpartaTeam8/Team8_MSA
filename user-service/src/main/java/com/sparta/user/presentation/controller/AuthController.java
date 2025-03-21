@@ -1,5 +1,7 @@
 package com.sparta.user.presentation.controller;
 
+import com.sparta.user.domain.model.CustomUserDetails;
+import com.sparta.user.domain.service.CustomUserDetailsService;
 import com.sparta.user.presentation.dto.*;
 import com.sparta.user.application.service.AuthService;
 import com.sparta.user.presentation.util.JwtUtil;
@@ -13,6 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final CustomUserDetailsService customUserDetailsService;
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
@@ -41,8 +47,16 @@ public class AuthController {
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
 
-        return ResponseEntity.ok(CommonResponse.OK(jwtUtil.generateToken(userDetails.getUsername()), "200"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("username", customUserDetails.getUsername());
+        response.put("role", customUserDetails.getRole());
+        response.put("email", customUserDetails.getEmail());
+        response.put("accessToken", jwtUtil.generateToken(userDetails.getUsername()));
+
+        return ResponseEntity.ok(CommonResponse.OK(response, "200"));
     }
 
 }
