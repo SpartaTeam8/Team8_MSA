@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class ProductResponseDto {
 
 	private UUID productId;
+	private UUID companyId;
+	private UUID hubId;
 	private String productName;
 	private int price;
 	private boolean isDeleted;

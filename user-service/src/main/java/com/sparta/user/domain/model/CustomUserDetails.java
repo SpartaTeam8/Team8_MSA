@@ -32,4 +32,6 @@ public class CustomUserDetails implements UserDetails {
     public String getEmail() {
         return user.getEmail(); // 추가 필드
     }
+
+    public String getRole(){return user.getRole();}
 }

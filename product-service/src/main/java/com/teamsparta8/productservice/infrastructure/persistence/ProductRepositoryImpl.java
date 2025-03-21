@@ -1,5 +1,6 @@
 package com.teamsparta8.productservice.infrastructure.persistence;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -25,13 +26,23 @@ public class ProductRepositoryImpl implements ProductRepository {
 	}
 
 	@Override
-	public Product findById(UUID productId) {
-		return productJpaRepository.findById(productId)
-			.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+	public Optional<Product> findById(UUID productId) {
+		return productJpaRepository.findById(productId);
 	}
 
 	@Override
 	public Page<Product> getProductSearch(String keyword, Pageable pageable, SortBy sortBy) {
 		return productQueryDslRepository.getProductSearch(keyword, pageable, sortBy);
+	}
+
+	@Override
+	public Page<Product> getProductSearchForHub(String keyword, Pageable pageable, SortBy sortBy,
+		UUID hubId) {
+		return productQueryDslRepository.getProductSearchForHub(keyword, pageable, sortBy, hubId);
+	}
+
+	@Override
+	public Optional<Product> findByProductId(UUID productId) {
+		return productQueryDslRepository.findByProductId(productId);
 	}
 }
