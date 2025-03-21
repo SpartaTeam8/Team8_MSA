@@ -12,4 +12,5 @@ public class CreateStockResponse {
 	private UUID hubId;
 	private UUID productId;
 	private int quantity;
+	private int price;
 }

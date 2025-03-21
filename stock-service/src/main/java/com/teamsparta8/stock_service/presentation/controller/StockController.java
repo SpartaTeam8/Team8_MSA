@@ -19,6 +19,7 @@ import com.teamsparta8.stock_service.presentation.dto.CommonResponse;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockResponse;
 import com.teamsparta8.stock_service.presentation.dto.DecreaseStockRequest;
+import com.teamsparta8.stock_service.presentation.dto.RollbackStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
@@ -70,6 +71,13 @@ public class StockController {
 	public ResponseEntity<CommonResponse<Void>> deleteStock(@PathVariable UUID stockId) {
 		stockService.deleteStock(stockId);
 		return ResponseEntity.ok(CommonResponse.OK("재고 삭제 성공"));
+	}
+
+	//주문 실패 시 재고 롤백
+	@PutMapping("/rollback")
+	public ResponseEntity<CommonResponse<String>> rollbackStock(@RequestBody RollbackStockRequest request) {
+		stockService.rollbackStock(request);
+		return ResponseEntity.ok(CommonResponse.OK(null, "재고 복구 성공"));
 	}
 
 }

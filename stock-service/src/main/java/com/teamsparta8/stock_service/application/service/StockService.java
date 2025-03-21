@@ -11,6 +11,7 @@ import com.teamsparta8.stock_service.domain.service.StockDomainService;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockResponse;
 import com.teamsparta8.stock_service.presentation.dto.DecreaseStockRequest;
+import com.teamsparta8.stock_service.presentation.dto.RollbackStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
@@ -35,9 +36,10 @@ public class StockService {
 		// }
 		// UUID huubId = prodcut.getHubId();
 		UUID dummyHubId = UUID.randomUUID();
-
+		// int Price = 1000;
 		//  ProductService에서 받은 hubId 사용
-		Stock stock = stockDomainService.createStock(request.getProductId(), dummyHubId, request.getQuantity());
+		Stock stock = stockDomainService.createStock(request.getProductId(), dummyHubId, request.getQuantity(),
+			request.getPrice());
 
 		return stockMapper.fromEntity(stock);
 	}
@@ -62,6 +64,13 @@ public class StockService {
 			.hubId(stock.getHubId()) // StockDomainService에서 조회한 hubId
 			.price(price)
 			.build();
+	}
+
+	//복원 로직
+	@Transactional
+	public void rollbackStock(RollbackStockRequest request) {
+		Stock stock = stockDomainService.findStockByProduct(request.getProductId());
+		stockDomainService.increaseStock(stock, request.getQuantity());
 	}
 	//재고 조회
 	@Transactional(readOnly = true)

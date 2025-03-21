@@ -17,6 +17,7 @@ public class StockMapper {
 			.hubId(request.getHubId())
 			.productId(request.getProductId())
 			.quantity(request.getQuantity())
+			.price(request.getPrice())
 			.build();
 	}
 
@@ -26,6 +27,7 @@ public class StockMapper {
 			.hubId(stock.getHubId())
 			.productId(stock.getProductId())
 			.quantity(stock.getQuantity())
+			.price(stock.getPrice())
 			.build();
 
 	}
