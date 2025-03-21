@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,6 +68,17 @@ public class CompanyController {
 
     CompanyResponseDto responseDto = companyService.updateCompany(id, requestDto);
     return ResponseEntity.ok(responseDto);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteCompany(
+      @PathVariable UUID id,
+      @RequestParam Long userId) {
+
+    // 회사 삭제 처리
+    companyService.deleteCompany(id, userId);
+
+    return ResponseEntity.ok("회사가 성공적으로 삭제되었습니다.");
   }
 }
 

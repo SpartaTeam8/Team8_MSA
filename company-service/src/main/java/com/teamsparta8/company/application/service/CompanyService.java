@@ -104,4 +104,22 @@ public class CompanyService {
     // 수정된 회사 정보 반환
     return new CompanyResponseDto(company);
   }
+
+  @Transactional
+  public void deleteCompany(UUID id, Long userId) {
+    // 회사 정보 조회
+    Company company = companyRepository.findById(id).orElseThrow(() ->
+        new IllegalArgumentException("회사가 존재하지 않습니다. ID: " + id));
+
+    // 회사 삭제 (deletedAt에 현재 시간 기록, deletedBy에 삭제한 사람 ID 기록)
+    company.deactivate(userId);
+
+    // 회사 삭제된 정보 저장
+    companyRepository.save(company);
+
+    // 연관된 다른 데이터들 비활성화 (필요한 경우에 따라 구현)
+    // 예: 연관된 부서, 제품, 직원 등
+    // 이 경우에는 다른 엔티티들이 Company 엔티티와 연관된 상태에서 삭제되거나 비활성화되도록 처리
+    // 예시: employeeRepository.deactivateEmployeesByCompanyId(id);
+  }
 }

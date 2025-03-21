@@ -126,11 +126,11 @@ public class Company {
   }
 
 
-  //회사 비활성화 메서드
+  //회사 비활성화 메서드 (논리적 삭제)
   public void deactivate(Long userId) {
-    this.status = CompanyStatus.INACTIVE;
-    this.deletedAt = LocalDateTime.now();
-    this.deletedBy = userId;
+    this.status = CompanyStatus.INACTIVE; // 비활성화 상태로 설정
+    this.deletedAt = LocalDateTime.now(); // 삭제 시각 기록
+    this.deletedBy = userId; // 삭제한 사람의 ID 기록
   }
 
 
