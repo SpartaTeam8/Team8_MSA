@@ -24,7 +24,9 @@ import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/stocks")
 @RequiredArgsConstructor
@@ -60,7 +62,6 @@ public class StockController {
 	@PutMapping("/rollback")
 	public ResponseEntity<CommonResponse<String>> rollbackStock(
 		@RequestBody RollbackStockRequest request) {
-
 		stockService.rollbackStock(request.getProductId(), request.getQuantity());
 		return ResponseEntity.ok(CommonResponse.OK("재고 복구 완료", "success"));
 	}

@@ -69,7 +69,7 @@ public class StockService {
 	//복원 로직
 	@Transactional
 	public void rollbackStock(UUID productId, int quantity) {
-		Stock stock = findStockByProduct(productId); // 이제 오류 안 뜸!
+		Stock stock = findStockByProduct(productId);
 		stock.increaseStock(quantity);
 	}
 	@Transactional(readOnly = true)
