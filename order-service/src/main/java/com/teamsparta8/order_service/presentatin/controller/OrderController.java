@@ -49,54 +49,6 @@ public class OrderController {
 		return ResponseEntity.ok(CommonResponse.OK(response, "주문이 성공적으로 수정되었습니다."));
 	}
 
-	// [일반 사용자] 본인이 주문한 목록 조회
-	@GetMapping("/my")
-	public ResponseEntity<CommonResponse<List<CreateOrderResponse>>> getMyOrders(
-		@RequestParam UUID userId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
-	) {
-		OrderPageResponse orderPageResponse = orderService.getUserOrders(userId, page, size);
-		return ResponseEntity.ok(
-			CommonResponse.OK(orderPageResponse.getOrders(), "사용자 주문 목록 조회 성공", orderPageResponse.getPagination())
-		);
-	}
-
-	// [허브 관리자] 본인의 허브에서 관리하는 주문 목록 조회
-	@GetMapping("/hub")
-	public ResponseEntity<CommonResponse<List<CreateOrderResponse>>> getHubOrders(
-		@RequestParam String role,
-		@RequestParam UUID hubId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
-	) {
-		if (!role.equals("HUB_MANAGER")) {
-			return ResponseEntity.badRequest().body(CommonResponse.ERROR("허브 관리자만 접근 가능합니다."));
-		}
-
-		OrderPageResponse orderPageResponse = orderService.getOrdersByHub(hubId, page, size);
-		return ResponseEntity.ok(
-			CommonResponse.OK(orderPageResponse.getOrders(), "허브 관리자 주문 목록 조회 성공", orderPageResponse.getPagination())
-		);
-	}
-
-	//[배송 담당자] 본인이 담당하는 주문 목록 조회
-	@GetMapping("/delivery")
-	public ResponseEntity<CommonResponse<List<CreateOrderResponse>>> getDeliveryOrders(
-		@RequestParam String role,
-		@RequestParam UUID userId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
-	) {
-		if (!role.equals("DELIVERY_PERSON")) {
-			return ResponseEntity.badRequest().body(CommonResponse.ERROR("배송 담당자만 접근 가능합니다."));
-		}
-
-		OrderPageResponse orderPageResponse = orderService.getOrdersByDeliveryId(userId, page, size);
-		return ResponseEntity.ok(
-			CommonResponse.OK(orderPageResponse.getOrders(), "배송 담당자 주문 목록 조회 성공", orderPageResponse.getPagination())
-		);
-	}
 
 	// 주문 단일 조회
 	@GetMapping("/{orderId}")
@@ -125,4 +77,14 @@ public class OrderController {
 			CommonResponse.OK(orderPageResponse.getOrders(), "주문 검색 결과 조회 성공", orderPageResponse.getPagination())
 		);
 	}
+	//주문 조회
+	@GetMapping
+	public ResponseEntity<CommonResponse<OrderPageResponse>> getAllOrders(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		OrderPageResponse response = orderService.getAllOrders(page, size);
+		return ResponseEntity.ok(CommonResponse.OK(response, "주문 전체 목록 조회 성공"));
+	}
+
 }

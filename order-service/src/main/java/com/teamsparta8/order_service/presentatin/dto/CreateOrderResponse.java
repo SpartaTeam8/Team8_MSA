@@ -48,4 +48,5 @@ public class CreateOrderResponse {
 	public static class ProductInfo {
 		private UUID productId;
 	}
+	private int totalPrice;
 }

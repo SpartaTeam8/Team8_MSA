@@ -26,8 +26,6 @@ public class Order extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID orderId;
 	@Column(nullable = false)
-	private UUID userId; // 주문을 생성한 사용자 ID 추가
-	@Column(nullable = false)
 	private UUID supplierCompanyId; //업체 담당자 조회 필터링 가능
 
 	@Column(nullable = false)
@@ -45,15 +43,12 @@ public class Order extends BaseEntity {
 	@Column(nullable = false)
 	private int quantity;
 
+	@Column(nullable = false)
+	private int totalPrice;
 	@Column(length = 255)
 	private String requestDescription;
-
-	public void updateHubId(UUID hubId) {
-		this.hubId = hubId;
-	}
 
 	public void updateDeliveryId(UUID deliveryId) {
 		this.deliveryId = deliveryId;
 	}
-
 }
