@@ -1,0 +1,30 @@
+server:
+  port: 8080  # 게이트웨이 포트
+
+spring:
+  application:
+    name: api-gateway  # Eureka에 등록될 서비스 이름
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE  # Eureka에서 USER-SERVICE로 요청 전달
+          predicates:
+            - Path=/api/users/**, /api/auth/**
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:19090/eureka/
+  instance:
+    prefer-ip-address: true  # 서비스 등록 시 IP 주소를 우선 사용
+
+jwt:
+  secret: "c2VjcmV0X2tleV9zZWNyZXRfa2V5X3NlY3JldF9rZXk="  # 환경변수로 설정하는 것이 보안적으로 안전함
