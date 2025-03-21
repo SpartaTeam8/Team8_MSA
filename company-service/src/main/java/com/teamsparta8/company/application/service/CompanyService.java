@@ -1,11 +1,13 @@
 package com.teamsparta8.company.application.service;
 
-import com.teamsparta8.company.application.client.HubServiceClient;
+//import com.teamsparta8.company.application.client.HubServiceClient;
 import com.teamsparta8.company.application.dto.CompanyRequestDto;
 import com.teamsparta8.company.application.dto.CompanyResponseDto;
 import com.teamsparta8.company.domain.entity.Company;
 import com.teamsparta8.company.domain.model.CompanyType;
 import com.teamsparta8.company.domain.repository.CompanyRepository;
+//import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
+import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +22,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CompanyService {
 
   private final CompanyRepository companyRepository;
-  private final HubServiceClient hubServiceClient; // 허브 검증용
+  //private final HubResponseInternalDto hubServiceClient // 허브 검증용
 
-  @Transactional
   public CompanyResponseDto createCompany(CompanyRequestDto requestDto) {
-    // 허브 존재 여부 검증(HubResponseDto가 반환되면 존재하는 것으로 간주)
-    try {
+    // ✅ HubServiceClient 호출 부분 주석 처리 (Hub API 요청 안 함)
+  /*  try {
       hubServiceClient.getHubById(requestDto.getHubId());
     } catch (Exception e) {
       throw new IllegalArgumentException("해당 허브가 존재하지 않습니다: " + requestDto.getHubId());
-    }
+    }*/
 
     // 중복 검사 (이름과 이메일)
     if (companyRepository.existsByName(requestDto.getName())) {
@@ -51,7 +53,7 @@ public class CompanyService {
   }
 
   @Transactional(readOnly = true)
-  public Page<CompanyResponseDto> searchCompanies(String name, CompanyType type, Long hubId, int page, int size) {
+  public Page<CompanyResponseDto> searchCompanies(String name, CompanyType type, UUID hubId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
     Specification<Company> spec = (root, query, criteriaBuilder) -> {
@@ -65,9 +67,11 @@ public class CompanyService {
         predicates.add(criteriaBuilder.equal(root.get("type"), type));
       }
 
-      if (hubId != null) {
-        predicates.add(criteriaBuilder.equal(root.get("hub").get("id"), hubId));
-      }
+      // hubId 관련된 부분 주석 처리- 테스트를 위함
+
+      /*if (hubId != null) {
+        predicates.add(criteriaBuilder.equal(root.get("hubId"), hubId));
+      }*/
 
       return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     };

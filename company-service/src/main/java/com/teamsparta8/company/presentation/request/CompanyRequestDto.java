@@ -4,6 +4,7 @@ import com.teamsparta8.company.domain.model.CompanyType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class CompanyRequestDto {
   private CompanyType type;
 
   @NotNull
-  private Long hubId;
+  private UUID hubId;
 
   @NotBlank
   private String address;

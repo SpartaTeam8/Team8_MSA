@@ -16,6 +16,7 @@ import com.teamsparta8.company.domain.model.CompanyStatus;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
+
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -48,6 +49,7 @@ public class Company {
   private String contactName; // 담당자 이름
 
   @Column(nullable = false, length = 100, unique = true)
+
   private String contactEmail; // 담당자 이메일
 
   @Column(nullable = false, length = 20)

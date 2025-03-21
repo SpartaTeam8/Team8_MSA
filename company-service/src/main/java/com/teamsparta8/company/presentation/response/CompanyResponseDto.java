@@ -3,6 +3,7 @@ package com.teamsparta8.company.presentation.response;
 import com.teamsparta8.company.domain.entity.Company;
 import com.teamsparta8.company.domain.model.CompanyType;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class CompanyResponseDto {
   private Long id;
   private String name;
   private CompanyType type;
-  private Long hubId;
+  private UUID hubId;
   private String address;
   private String contactName;
   private String contactEmail;
@@ -27,7 +28,7 @@ public class CompanyResponseDto {
     this.id = company.getId();
     this.name = company.getName();
     this.type = company.getType();
-    this.hubId = company.getHub().getId();
+    this.hubId = company.getHubId();
     this.address = company.getAddress();
     this.contactName = company.getContactName();
     this.contactEmail = company.getContactEmail();

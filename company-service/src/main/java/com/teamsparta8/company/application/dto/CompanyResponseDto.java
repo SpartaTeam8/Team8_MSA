@@ -34,6 +34,6 @@ public class CompanyResponseDto {
     this.businessRegistrationNumber = company.getBusinessRegistrationNumber();
     this.createdAt = company.getCreatedAt();
     this.updatedAt = company.getUpdatedAt();
-    this.isActive = (company.getDeletedAt() == null); // 삭제되지 않았으면 활성 상태
+    this.isActive = (company.getDeletedAt() == null);
   }
 }
