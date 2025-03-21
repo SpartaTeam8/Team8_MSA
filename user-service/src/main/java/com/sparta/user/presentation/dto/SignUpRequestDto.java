@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class SignUpRequestDto {
     @NotBlank(message = "username은 필수 입력값입니다.")
     @Pattern(regexp = "^[a-z0-9]+$")

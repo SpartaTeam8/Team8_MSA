@@ -54,7 +54,11 @@ public class HubController {
 			.totalPages(hubPages.getTotalPages())
 			.build();
 
-		return CommonResponse.OK(DtoMapper.convertToReponseList(hubPages.getContent()), "허브 리스트 조회 성공", pagination);
+		return CommonResponse.OK(
+			DtoMapper.convertToReponseList(hubPages.getContent(), DtoMapper::convertToResponse),
+			"허브 리스트 조회 성공",
+			pagination
+		);
 	}
 
 	@GetMapping("/{hubId}")

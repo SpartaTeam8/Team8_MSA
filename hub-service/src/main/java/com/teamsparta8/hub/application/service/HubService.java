@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import com.teamsparta8.hub.application.dto.HubCreateInternalDto;
 import com.teamsparta8.hub.application.dto.HubResponseInternalDto;
 import com.teamsparta8.hub.application.dto.HubUpdateInternalDto;
+import com.teamsparta8.hub.application.mapper.HubMapper;
 import com.teamsparta8.hub.domain.model.Hub;
 import com.teamsparta8.hub.domain.service.HubDomainService;
-import com.teamsparta8.hub.presentation.dto.hub.HubUpdateDto;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class HubService {
 
 		Page<Hub> hubs = hubDomainService.searchHubs(pageable);
 
-		return hubMapper.hubListToResponse(hubs);
+		return hubMapper.hubPageToResponse(hubs);
 	}
 
 	public HubResponseInternalDto updateHub(UUID hubId, HubUpdateInternalDto request) {
@@ -70,11 +70,11 @@ public class HubService {
 
 		Hub hub = hubDomainService.readHub(hubId);
 
-		if(request.getHubName() != null) {
+		if (request.getHubName() != null) {
 			hub.setHubName(request.getHubName());
 		}
 
-		if(request.getHubAddress() != null) {
+		if (request.getHubAddress() != null) {
 			hub.setHubAddress(request.getHubAddress());
 		}
 
@@ -91,10 +91,7 @@ public class HubService {
 
 		hubDomainService.updateHub(hub);
 
-
-
 		// deletedBy는 아직 미적용
-
 
 		return hubMapper.hubToResponse(hub);
 	}

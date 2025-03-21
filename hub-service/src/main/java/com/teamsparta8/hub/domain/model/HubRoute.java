@@ -27,13 +27,17 @@ public class HubRoute extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID hubRouteId;
 
+	@Column(nullable = false)
 	private UUID departureHubId;
 
+	@Column(nullable = false)
 	private UUID arrivalHubId;
 
 	// 00:00:00 형식으로 저장 예상
+	@Column(nullable = false)
 	private LocalDateTime timeTaken;
 
 	// 거리 단위 : km , 소수점 단위로 m 표현
+	@Column(nullable = false)
 	private Double distance;
 }
