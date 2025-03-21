@@ -113,28 +113,40 @@ public class OrderService {
 
 	@Transactional
 	public CreateOrderResponse updateOrder(UUID orderId, UpdateOrderRequest request) {
-		// 1. 주문 조회
-		Order order = orderDomainService.getOrderById(orderId);
+		Order existingOrder = orderDomainService.getOrderById(orderId);
+		int originalQuantity = existingOrder.getQuantity();
+		int newQuantity = request.getQuantity();
 
-		// 2. 가격 정보 가져오기 (StockService에서 productId로 조회)
-		CommonResponse<StockCheckResponse> stockResponse = stockClient.checkAndDecreaseStock(
-			new DecreaseStockRequest(order.getProductId(), 0) // 차감은 하지 않고 price/hubId만 확인용
+		// 1. 기존 주문 수량 복구
+		try {
+			rollbackStock(existingOrder.getProductId(), originalQuantity);
+		} catch (Exception ex) {
+			log.error("기존 재고 복구 실패", ex);
+			throw new RuntimeException("기존 재고 복구 실패: " + ex.getMessage());
+		}
+
+		// 2. 새 수량만큼 재고 차감
+		StockCheckResponse stockResponse;
+		try {
+			DecreaseStockRequest stockRequest = new DecreaseStockRequest(existingOrder.getProductId(), newQuantity);
+			stockResponse = stockClient.checkAndDecreaseStock(stockRequest).getData();
+		} catch (Exception e) {
+			throw new RuntimeException("새 주문 수량 차감 실패: " + e.getMessage());
+		}
+
+		// 3. 총 가격 계산
+		int totalPrice = stockResponse.getPrice() * newQuantity;
+
+		// 4. 도메인에서 주문 업데이트 처리 (totalPrice도 넘겨줌!)
+		Order updatedOrder = orderDomainService.updateOrder(
+			existingOrder,
+			newQuantity,
+			request.getRequestDescription(),
+			totalPrice
 		);
-		int price = stockResponse.getData().getPrice();
-		int newTotalPrice = price * request.getQuantity();
 
-		// 3. 도메인 서비스에 넘겨서 업데이트
-		Order updated = orderDomainService.updateOrder(
-			order,
-			request.getQuantity(),
-			newTotalPrice,
-			request.getRequestDescription()
-		);
-
-		orderDomainService.saveOrder(updated);
-
-		// 4. 응답 반환
-		return orderMapper.fromEntity(updated);
+		orderDomainService.saveOrder(updatedOrder);
+		return orderMapper.fromEntity(updatedOrder);
 	}
 
 	//단건 조회

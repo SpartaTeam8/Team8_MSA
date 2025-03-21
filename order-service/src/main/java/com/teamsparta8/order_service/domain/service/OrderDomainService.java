@@ -40,7 +40,7 @@ public class OrderDomainService {
 
 	}
 
-	public Order updateOrder(Order order, int quantity,int totalPrice, String requestDescription) {
+	public Order updateOrder(Order order, int quantity, String requestDescription, int totalPrice) {
 		//  수량 검증
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
@@ -55,8 +55,8 @@ public class OrderDomainService {
 			.hubId(order.getHubId())
 			.deliveryId(order.getDeliveryId())
 			.quantity(quantity)
-			.totalPrice(totalPrice)
 			.requestDescription(requestDescription)
+			.totalPrice(totalPrice)
 			.build();
 	}
 
