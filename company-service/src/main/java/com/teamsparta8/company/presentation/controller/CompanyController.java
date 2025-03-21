@@ -34,17 +34,27 @@ public class CompanyController {
   @GetMapping
   public ResponseEntity<Page<CompanyResponseDto>> searchCompanies(
       @RequestParam(required = false) String name,
-      @RequestParam(required = false) CompanyType type,
+      @RequestParam(required = false) String type, // String으로 받아서 처리
       @RequestParam(required = false) String hubId,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
 
+    // String으로 받은 type을 CompanyType으로 변환 (잘못된 값은 예외 처리)
+    CompanyType companyType = null;
+    if (type != null && !type.isBlank()) {
+      try {
+        companyType = CompanyType.valueOf(type.toUpperCase()); // Enum으로 변환
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Invalid company type: " + type);
+      }
+    }
 
-    //  hubId가 존재하면 UUID로 변환
+    // hubId가 존재하면 UUID로 변환
     UUID convertedHubId = (hubId != null && !hubId.isBlank()) ? UUID.fromString(hubId) : null;
 
-    Page<CompanyResponseDto> companies = companyService.searchCompanies(name, type,
-        UUID.fromString(hubId), page, size);
+    // 서비스 호출 시 변환된 companyType을 전달
+    Page<CompanyResponseDto> companies = companyService.searchCompanies(name, companyType,
+        convertedHubId, page, size);
     return ResponseEntity.ok(companies);
   }
 }

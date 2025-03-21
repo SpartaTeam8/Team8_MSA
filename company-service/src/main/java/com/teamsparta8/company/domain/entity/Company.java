@@ -4,6 +4,7 @@ package com.teamsparta8.company.domain.entity;
 import com.teamsparta8.company.application.dto.CompanyRequestDto;
 import com.teamsparta8.company.domain.model.CompanyType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -48,8 +49,8 @@ public class Company {
   @Column(nullable = false, length = 100)
   private String contactName; // 담당자 이름
 
+  @Email
   @Column(nullable = false, length = 100, unique = true)
-
   private String contactEmail; // 담당자 이메일
 
   @Column(nullable = false, length = 20)
