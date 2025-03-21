@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +58,15 @@ public class CompanyController {
     Page<CompanyResponseDto> companies = companyService.searchCompanies(name, companyType,
         convertedHubId, page, size);
     return ResponseEntity.ok(companies);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<CompanyResponseDto> updateCompany(
+      @PathVariable UUID id,
+      @Valid @RequestBody CompanyRequestDto requestDto) {
+
+    CompanyResponseDto responseDto = companyService.updateCompany(id, requestDto);
+    return ResponseEntity.ok(responseDto);
   }
 }
 

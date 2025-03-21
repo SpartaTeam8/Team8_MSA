@@ -31,7 +31,7 @@ public class Company {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private UUID id;
 
   @Column(nullable = false, length = 100, unique = true)
   private String name; // 업체명
@@ -132,6 +132,8 @@ public class Company {
     this.deletedAt = LocalDateTime.now();
     this.deletedBy = userId;
   }
+
+
 
 
 }

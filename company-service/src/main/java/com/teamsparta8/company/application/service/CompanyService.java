@@ -79,4 +79,29 @@ public class CompanyService {
     Page<Company> companies = companyRepository.findAll(spec, pageable);
     return companies.map(CompanyResponseDto::new);
   }
+
+
+  @Transactional
+  public CompanyResponseDto updateCompany(UUID id, CompanyRequestDto requestDto) {
+    // ID를 이용해 회사 조회
+    Company company = companyRepository.findById(id).orElseThrow(() ->
+        new IllegalArgumentException("회사 정보가 존재하지 않습니다. ID: " + id));
+
+    // Company 객체의 updateCompany 메서드 사용하여 회사 정보 수정
+    company.updateCompany(
+        requestDto.getName(),
+        requestDto.getAddress(),
+        requestDto.getContactName(),
+        requestDto.getContactEmail(),
+        requestDto.getContactPhone(),
+        requestDto.getType()
+    );
+
+
+    // 회사 저장 (자동으로 업데이트됨)
+    companyRepository.save(company);
+
+    // 수정된 회사 정보 반환
+    return new CompanyResponseDto(company);
+  }
 }
