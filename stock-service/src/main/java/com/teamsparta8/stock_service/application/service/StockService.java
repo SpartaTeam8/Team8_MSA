@@ -68,9 +68,13 @@ public class StockService {
 
 	//복원 로직
 	@Transactional
-	public void rollbackStock(RollbackStockRequest request) {
-		Stock stock = stockDomainService.findStockByProduct(request.getProductId());
-		stockDomainService.increaseStock(stock, request.getQuantity());
+	public void rollbackStock(UUID productId, int quantity) {
+		Stock stock = findStockByProduct(productId); // 이제 오류 안 뜸!
+		stock.increaseStock(quantity);
+	}
+	@Transactional(readOnly = true)
+	public Stock findStockByProduct(UUID productId) {
+		return stockDomainService.findStockByProduct(productId);
 	}
 	//재고 조회
 	@Transactional(readOnly = true)

@@ -56,6 +56,14 @@ public class StockController {
 	}
 
 
+	//주문 실패 시 재고 롤백
+	@PutMapping("/rollback")
+	public ResponseEntity<CommonResponse<String>> rollbackStock(
+		@RequestBody RollbackStockRequest request) {
+
+		stockService.rollbackStock(request.getProductId(), request.getQuantity());
+		return ResponseEntity.ok(CommonResponse.OK("재고 복구 완료", "success"));
+	}
 	// 재고 업데이트
 	@PutMapping("/{productId}")
 	public ResponseEntity<CommonResponse<UpdateStockResponse>> updateStock(
@@ -71,13 +79,6 @@ public class StockController {
 	public ResponseEntity<CommonResponse<Void>> deleteStock(@PathVariable UUID stockId) {
 		stockService.deleteStock(stockId);
 		return ResponseEntity.ok(CommonResponse.OK("재고 삭제 성공"));
-	}
-
-	//주문 실패 시 재고 롤백
-	@PutMapping("/rollback")
-	public ResponseEntity<CommonResponse<String>> rollbackStock(@RequestBody RollbackStockRequest request) {
-		stockService.rollbackStock(request);
-		return ResponseEntity.ok(CommonResponse.OK(null, "재고 복구 성공"));
 	}
 
 }
