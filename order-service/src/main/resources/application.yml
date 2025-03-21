@@ -1,14 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
+    url: jdbc:postgresql://localhost:5433/orderdb
+    username: orderdb
     password: 1234
     driver-class-name: org.postgresql.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 #    data:
 #      redis:
 #        host: localhost

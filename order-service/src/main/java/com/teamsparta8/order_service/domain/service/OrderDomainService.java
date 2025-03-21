@@ -27,7 +27,7 @@ public class OrderDomainService {
 			throw new IllegalArgumentException("수량은 0보다 커야 합니다.");
 		}
 
-		Order order = Order.builder()
+		return Order.builder()
 			.supplierCompanyId(supplierCompanyId)
 			.receiverCompanyId(receiverCompanyId)
 			.productId(productId)
@@ -38,10 +38,9 @@ public class OrderDomainService {
 			.requestDescription(requestDescription)
 			.build();
 
-		return orderRepository.save(order);
 	}
 
-	public Order updateOrder(Order order, int quantity, String requestDescription) {
+	public Order updateOrder(Order order, int quantity,int totalPrice, String requestDescription) {
 		//  수량 검증
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
@@ -56,7 +55,7 @@ public class OrderDomainService {
 			.hubId(order.getHubId())
 			.deliveryId(order.getDeliveryId())
 			.quantity(quantity)
-			.totalPrice(order.getTotalPrice())
+			.totalPrice(totalPrice)
 			.requestDescription(requestDescription)
 			.build();
 	}
