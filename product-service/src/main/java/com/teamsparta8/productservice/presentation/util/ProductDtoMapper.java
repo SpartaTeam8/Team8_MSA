@@ -12,7 +12,6 @@ import com.teamsparta8.productservice.presentation.dto.ProductUpdateDto;
 public class ProductDtoMapper {
 
 	public static ProductCreateInternalDto convertToCreateInternalDto(ProductCreateDto createDto) {
-
 		return ProductCreateInternalDto.builder()
 			.companyId(createDto.getCompanyId())
 			.hubId(createDto.getHubId())
@@ -31,6 +30,8 @@ public class ProductDtoMapper {
 	public static ProductResponseDto convertToResponseDto(ProductResponseInternalDto response) {
 		return ProductResponseDto.builder()
 			.productId(response.getProductId())
+			.companyId(response.getCompanyId())
+			.hubId(response.getHubId())
 			.productName(response.getProductName())
 			.price(response.getPrice())
 			.isDeleted(response.isDeleted())

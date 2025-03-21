@@ -1,12 +1,12 @@
 package com.teamsparta8.productservice.common;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommonResponse<T> {
 	private String resultCode;
 	private String message;
@@ -15,34 +15,34 @@ public class CommonResponse<T> {
 
 	// 성공한 작업의 Message 포함하여 전달
 	public static <T> CommonResponse<T> OK(String message) {
-		return CommonResponse.<T>builder()
-			.resultCode("OK")
-			.message(message)
-			.build();
+		CommonResponse<T> response = new CommonResponse<>();
+		response.resultCode = "OK";
+		response.message = message;
+		return response;
 	}
 
 	public static <T> CommonResponse<T> OK(T data, String message) {
-		return CommonResponse.<T>builder()
-			.resultCode("OK")
-			.message(message)
-			.data(data)
-			.build();
+		CommonResponse<T> response = new CommonResponse<>();
+		response.resultCode = "OK";
+		response.message = message;
+		response.data = data;
+		return response;
 	}
 
 	public static <T> CommonResponse<T> OK(T data, String message, Pagination pagination) {
-		return CommonResponse.<T>builder()
-			.resultCode("OK")
-			.message(message)
-			.data(data)
-			.pagination(pagination)
-			.build();
+		CommonResponse<T> response = new CommonResponse<>();
+		response.resultCode = "OK";
+		response.message = message;
+		response.data = data;
+		response.pagination = pagination;
+		return response;
 	}
 
 	public static <T> CommonResponse<T> ERROR(String message){
-		return CommonResponse.<T>builder()
-			.resultCode("ERROR")
-			.message(message)
-			.build();
+		CommonResponse<T> response = new CommonResponse<>();
+		response.resultCode = "ERROR";
+		response.message = message;
+		return response;
 	}
 }
 

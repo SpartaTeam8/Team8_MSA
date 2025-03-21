@@ -13,7 +13,6 @@ import com.teamsparta8.productservice.domain.entity.Product;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProductMapper {
-
 	//DTO -> Model
 	Product createToProduct(ProductCreateInternalDto requestDto);
 
@@ -26,6 +25,7 @@ public interface ProductMapper {
 	Product updateToProduct(ProductUpdateInternalDto requestDto, @MappingTarget Product product);
 
 	//Model -> DTO
+	@Mapping(source = "deleted", target = "isDeleted")
 	ProductResponseInternalDto productToResponse(Product product);
 
 	//개별 Product를 ProductResponseInternalDto로 변환
@@ -38,5 +38,4 @@ public interface ProductMapper {
 
 		return productList.map(this::productToDto);
 	}
-
 }
