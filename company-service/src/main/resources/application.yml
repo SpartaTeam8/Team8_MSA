@@ -1,10 +1,31 @@
 spring:
-datasource:
- #   url: jdbc:postgresql://localhost:5432/your_database_name
-  #  username: your_db_user
-   # password: your_db_password
-    #driver-class-name: org.postgresql.Driver
+  application:
+    name: company-service
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://localhost:5433/companydb
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
   jpa:
-   # database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none # 데이터베이스가 없을 때 오류 방지
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    enabled: false
+
+
+feign:
+  client:
+    config:
+      default:
+        register-with-eureka: false
