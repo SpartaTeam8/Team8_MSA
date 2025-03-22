@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.teamsparta8.deliveryservice.application.dto.UpdateDeliveryInternalDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class DeliveryService {
 		return deliveryMapper.deliveryPageToResponse(deliveryPage);
 	}
 
-	public DeliveryResponseInternalDto updateDelivery(UUID deliveryId, UpdateDeliveryDto request) {
+	public DeliveryResponseInternalDto updateDelivery(UUID deliveryId, UpdateDeliveryInternalDto request) {
 
 		Delivery delivery = deliveryDomainService.readDelivery(deliveryId);
 

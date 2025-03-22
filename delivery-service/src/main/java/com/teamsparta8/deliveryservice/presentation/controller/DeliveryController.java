@@ -3,6 +3,9 @@ package com.teamsparta8.deliveryservice.presentation.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.teamsparta8.deliveryservice.application.dto.DeliveryRouteLogResponseInternalDto;
+import com.teamsparta8.deliveryservice.application.service.DeliveryRouteLogService;
+import com.teamsparta8.deliveryservice.presentation.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +25,6 @@ import com.teamsparta8.deliveryservice.application.dto.CreateDeliveryInternalDto
 import com.teamsparta8.deliveryservice.application.dto.DeliveryResponseInternalDto;
 import com.teamsparta8.deliveryservice.application.dto.UpdateDeliveryInternalDto;
 import com.teamsparta8.deliveryservice.application.service.DeliveryService;
-import com.teamsparta8.deliveryservice.presentation.dto.CommonResponse;
-import com.teamsparta8.deliveryservice.presentation.dto.CreateDeliveryDto;
-import com.teamsparta8.deliveryservice.presentation.dto.DeliveryResponseDto;
-import com.teamsparta8.deliveryservice.presentation.dto.Pagination;
-import com.teamsparta8.deliveryservice.presentation.dto.UpdateDeliveryDto;
 import com.teamsparta8.deliveryservice.presentation.util.DtoMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -35,68 +33,80 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/deliveries")
 public class DeliveryController {
-	private final DeliveryService deliveryService;
+    private final DeliveryService deliveryService;
 
-	@PostMapping("")
-	public CommonResponse<DeliveryResponseDto> createDelivery(@RequestBody CreateDeliveryDto request) {
+    private final DeliveryRouteLogService deliveryRouteLogService;
 
-		CreateDeliveryInternalDto internalDto = DtoMapper.convertToCreateInternalDto(request);
+    @PostMapping("")
+    public CommonResponse<DeliveryResponseDto> createDelivery(@RequestBody CreateDeliveryDto request) {
 
-		DeliveryResponseInternalDto response = deliveryService.createDelivery(internalDto);
+        CreateDeliveryInternalDto internalDto = DtoMapper.convertToCreateInternalDto(request);
 
-		return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 생성 성공");
-	}
+        DeliveryResponseInternalDto response = deliveryService.createDelivery(internalDto);
 
-	@GetMapping("/{deliveryId}")
-	public CommonResponse<DeliveryResponseDto> readDelivery(@PathVariable UUID deliveryId) {
+        return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 생성 성공");
+    }
 
-		DeliveryResponseInternalDto response = deliveryService.readDelivery(deliveryId);
+    @GetMapping("/{deliveryId}")
+    public CommonResponse<DeliveryResponseDto> readDelivery(@PathVariable UUID deliveryId) {
 
-		return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 조회 성공 : " + deliveryId);
-	}
+        DeliveryResponseInternalDto response = deliveryService.readDelivery(deliveryId);
 
-	@GetMapping("")
-	public CommonResponse<List<DeliveryResponseDto>> searchDeliveries(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam UUID departureHubId,
-		Pageable pageable) {
+        return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 조회 성공 : " + deliveryId);
+    }
 
-		Page<DeliveryResponseInternalDto> responsePage = deliveryService
-			.searchDeliveriesByDepartureHubId(departureHubId, pageable);
+    @GetMapping("")
+    public CommonResponse<List<DeliveryResponseDto>> searchDeliveries(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam UUID departureHubId,
+            Pageable pageable) {
 
-		Pagination pagination = Pagination.builder()
-			.currentElements(responsePage.getNumberOfElements())
-			.currentPage(responsePage.getNumber())
-			.totalElements(responsePage.getTotalElements())
-			.totalPages(responsePage.getTotalPages())
-			.build();
+        Page<DeliveryResponseInternalDto> responsePage = deliveryService
+                .searchDeliveriesByDepartureHubId(departureHubId, pageable);
 
-		return CommonResponse.OK(
-			DtoMapper.convertToReponseList(responsePage.getContent()),
-			"담당 허브의 배송 조회 성공",
-			pagination
-		);
-	}
+        Pagination pagination = Pagination.builder()
+                .currentElements(responsePage.getNumberOfElements())
+                .currentPage(responsePage.getNumber())
+                .totalElements(responsePage.getTotalElements())
+                .totalPages(responsePage.getTotalPages())
+                .build();
 
-	// 배송 담당자 지정과 배송 상태 변경만 수정 가능하도록
-	@PatchMapping("/{deliveryId}")
-	public CommonResponse<DeliveryResponseDto> updateDelivery(
-		@RequestBody UpdateDeliveryDto request,
-		@PathVariable UUID deliveryId) {
+        return CommonResponse.OK(
+                DtoMapper.convertToReponseList(responsePage.getContent(), DtoMapper::convertToResponse),
+                "담당 허브의 배송 조회 성공",
+                pagination
+        );
+    }
 
-		UpdateDeliveryInternalDto internalDto = DtoMapper.convertToUpdateInternalDto(request);
+    // 배송 담당자 지정과 배송 상태 변경만 수정 가능하도록
+    @PatchMapping("/{deliveryId}")
+    public CommonResponse<DeliveryResponseDto> updateDelivery(
+            @RequestBody UpdateDeliveryDto request,
+            @PathVariable UUID deliveryId) {
 
-		DeliveryResponseInternalDto response = deliveryService.updateDelivery(deliveryId, request);
+        UpdateDeliveryInternalDto internalDto = DtoMapper.convertToUpdateInternalDto(request);
 
-		return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 수정 성공 : " + deliveryId);
-	}
+        DeliveryResponseInternalDto response = deliveryService.updateDelivery(deliveryId, internalDto);
 
-	@DeleteMapping("/{deliveryId}")
-	public CommonResponse<DeliveryResponseDto> deleteDelivery(@PathVariable UUID deliveryId, @AuthenticationPrincipal UserDetails userDetails) {
+        return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 수정 성공 : " + deliveryId);
+    }
 
-		DeliveryResponseInternalDto response = deliveryService.deleteDelivery(deliveryId, userDetails.getUsername());
+    @DeleteMapping("/{deliveryId}")
+    public CommonResponse<DeliveryResponseDto> deleteDelivery(@PathVariable UUID deliveryId, @AuthenticationPrincipal UserDetails userDetails) {
 
-		return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 삭제 성공 : " + deliveryId);
-	}
+        DeliveryResponseInternalDto response = deliveryService.deleteDelivery(deliveryId, userDetails.getUsername());
 
+        return CommonResponse.OK(DtoMapper.convertToResponse(response), "배송 삭제 성공 : " + deliveryId);
+    }
+
+
+    // ------------------ RouteLog 관련 Endpoint------------------------
+
+    @GetMapping("/{deliveryId}/routes")
+    public CommonResponse<List<DeliveryRouteLogResponseDto>> getDeliveryRoutes(@PathVariable(name = "deliveryId") UUID deliveryId) {
+
+        List<DeliveryRouteLogResponseInternalDto> responseList = deliveryRouteLogService.getDeliveryRouteLog(deliveryId);
+
+        return CommonResponse.OK(DtoMapper.convertToReponseList(responseList, DtoMapper::convertToResponse), "배송경로기록 조회 성공 : " + deliveryId);
+    }
 }

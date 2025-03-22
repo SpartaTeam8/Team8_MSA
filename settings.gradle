@@ -9,3 +9,4 @@ project(':company-service').projectDir = file('company-service')
 include 'order-service'
 include 'hub-service'
 include 'stock-service'
+include 'delivery-service'
