@@ -2,6 +2,7 @@ package com.teamsparta8.deliveryservice.domain.service;
 
 import java.util.UUID;
 
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

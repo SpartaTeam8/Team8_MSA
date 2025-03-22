@@ -1,6 +1,7 @@
 package com.teamsparta8.deliveryservice.domain.model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -47,7 +48,7 @@ public class DeliveryRouteLog {
 
 	// 예상 소요시간
 	@Column(nullable = false)
-	private LocalDateTime expectedDuration;
+	private LocalTime expectedDuration;
 
 	// 실제 이동 거리
 	@Column(nullable = false)
@@ -55,16 +56,16 @@ public class DeliveryRouteLog {
 
 	// 실제 소요 시간
 	@Column(nullable = false)
-	private LocalDateTime timeTaken;
+	private LocalTime timeTaken;
 
 	@Column(nullable = false)
-	private DeliveryStatus status;
+	private DeliveryStatus deliveryStatus;
 
 	@Column(nullable = false)
 	private UUID hubDeliveryManagerId;
 
 	@ManyToOne
-	@JoinColumn(name="delivery_id", nullable = false)
+	@JoinColumn(name = "delivery_id", nullable = false)
 	@JsonBackReference
 	private Delivery delivery;
 }

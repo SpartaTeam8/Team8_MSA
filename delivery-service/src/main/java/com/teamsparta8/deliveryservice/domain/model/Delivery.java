@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -53,12 +54,13 @@ public class Delivery extends BaseEntity {
 	private String recipientSlackId;
 
 	@Column(nullable = false)
-	private DeliveryStatus status;
+	private DeliveryStatus deliveryStatus;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private UUID companyDeliveryManagerId;
 
 	@OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JsonIgnore
+	@Builder.Default
 	private List<DeliveryRouteLog> deliveryRouteLogs = new ArrayList<>();
 }

@@ -12,5 +12,4 @@ public class UpdateDeliveryDto {
 	private UUID companyDeliveryManagerId;
 
 	private String deliveryStatus;
-
 }
