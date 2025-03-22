@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyResponseDto {
-  private Long id;
+  private UUID id;
   private String name;
   private CompanyType type;
   private UUID hubId;
