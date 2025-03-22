@@ -19,11 +19,14 @@ import com.teamsparta8.stock_service.presentation.dto.CommonResponse;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.CreateStockResponse;
 import com.teamsparta8.stock_service.presentation.dto.DecreaseStockRequest;
+import com.teamsparta8.stock_service.presentation.dto.RollbackStockRequest;
 import com.teamsparta8.stock_service.presentation.dto.StockCheckResponse;
 import com.teamsparta8.stock_service.presentation.dto.UpdateStockResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/stocks")
 @RequiredArgsConstructor
@@ -55,6 +58,13 @@ public class StockController {
 	}
 
 
+	//주문 실패 시 재고 롤백
+	@PutMapping("/rollback")
+	public ResponseEntity<CommonResponse<String>> rollbackStock(
+		@RequestBody RollbackStockRequest request) {
+		stockService.rollbackStock(request.getProductId(), request.getQuantity());
+		return ResponseEntity.ok(CommonResponse.OK("재고 복구 완료", "success"));
+	}
 	// 재고 업데이트
 	@PutMapping("/{productId}")
 	public ResponseEntity<CommonResponse<UpdateStockResponse>> updateStock(

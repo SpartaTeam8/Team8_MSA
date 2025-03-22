@@ -16,36 +16,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderQueryRepository {
 	private final JPAQueryFactory queryFactory;
-
-	// [일반 사용자] 본인이 주문한 목록 조회
-	public QueryResults<Order> findOrdersByUserId(UUID userId, int page, int size) {
+	public QueryResults<Order> findAllOrders(int page, int size) {
 		QOrder order = QOrder.order;
 
 		return queryFactory.selectFrom(order)
-			.where(order.receiverCompanyId.eq(userId)) //주문 수취인 기준 필터링
-			.offset(page * size)
-			.limit(size)
-			.fetchResults();
-	}
-
-	// [허브 관리자] 허브 ID 기반 주문 조회
-	public QueryResults<Order> findOrdersByHubId(UUID hubId, int page, int size) {
-		QOrder order = QOrder.order;
-
-		return queryFactory.selectFrom(order)
-			.where(order.hubId.eq(hubId)) //허브 기준 필터링
-			.offset(page * size)
-			.limit(size)
-			.fetchResults();
-	}
-
-	// [배송 담당자] 본인이 담당하는 주문 목록 조회
-	public QueryResults<Order> findOrdersByDeliveryId(UUID deliveryId, int page, int size) {
-		QOrder order = QOrder.order;
-
-		return queryFactory.selectFrom(order)
-			.where(order.deliveryId.eq(deliveryId)) // 배송 담당자 기준 필터링
-			.offset(page * size)
+			.offset((long) page * size)
 			.limit(size)
 			.fetchResults();
 	}

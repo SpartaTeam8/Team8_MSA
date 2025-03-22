@@ -15,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 public class StockDomainService {
 	private final StockRepository stockRepository;
 	@Transactional
-	public Stock createStock(UUID productId, UUID hubId, int quantity) {
+	public Stock createStock(UUID productId, UUID hubId, int quantity,int price) {
 		Stock stock = Stock.builder()
 			.productId(productId)
 			.hubId(hubId)
 			.quantity(quantity)
+			.price(price)
 			.build();
 
 		return stockRepository.save(stock);
@@ -28,7 +29,7 @@ public class StockDomainService {
 
 	// `productId` 기반으로 Stock 조회
 	public Stock findStockByProduct(UUID productId) {
-		return stockRepository.findByProductId(productId)
+		return stockRepository.findFirstByProductId(productId)
 			.orElseThrow(() -> new RuntimeException("해당 상품의 재고가 없습니다."));
 	}
 
@@ -60,6 +61,19 @@ public class StockDomainService {
 		stockRepository.deleteByStockId(stockId);
 	}
 
+	@Transactional
+	public void increaseStock(Stock stock, int quantity) {
+		stock.increaseStock(quantity);
+		stockRepository.save(stock);
+	}
+
+	//유효성 체크
+	public void rollbackStock(Stock stock, int quantity) {
+		// 실제 재고가 적다면 더해주기 전에 검증
+		if (quantity < 0) throw new IllegalArgumentException("복구 수량은 0보다 커야 합니다.");
+		stock.increaseStock(quantity);
+		stockRepository.save(stock);
+	}
 
 
 }

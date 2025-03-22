@@ -31,6 +31,7 @@ public class OrderMapper {
 				.hubId(order.getHubId())
 				.deliveryId(order.getDeliveryId())
 				.quantity(order.getQuantity())
+				.totalPrice(order.getTotalPrice())
 				.requestDescription(order.getRequestDescription())
 				.build())
 			.companyInfo(CreateOrderResponse.CompanyInfo.builder()

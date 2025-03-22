@@ -16,7 +16,7 @@ public class StockRepositoryImpl implements StockRepository {
 	private final JpaStockRepository jpaStockRepository;
 
 	@Override
-	public Optional<Stock> findByProductId(UUID productId) {
+	public Optional<Stock> findFirstByProductId(UUID productId) {
 		return jpaStockRepository.findByProductId(productId);
 	}
 

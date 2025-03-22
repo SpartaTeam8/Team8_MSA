@@ -33,7 +33,7 @@ public class Stock extends BaseEntity{
 
 	@Column(nullable = false)
 	private int quantity;
-	@Column(nullable = false) // ✅ 가격 필드 추가
+	@Column(nullable = false) // 가격 필드 추가
 	private int price;
 
 	public void decreaseStock(int amount) {
@@ -48,5 +48,8 @@ public class Stock extends BaseEntity{
 			throw new IllegalArgumentException("재고는 0 이상이어야 합니다.");
 		}
 		this.quantity = newQuantity;
+	}
+	public void increaseStock(int amount) {
+		this.quantity += amount;
 	}
 }

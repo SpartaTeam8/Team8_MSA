@@ -17,6 +17,7 @@ public class CreateOrderResponse {
 	private OrderInfo orderInfo;
 	private CompanyInfo companyInfo;
 	private ProductInfo productInfo;
+
 	@Getter
 	@Setter
 	@Builder
@@ -27,6 +28,7 @@ public class CreateOrderResponse {
 		private UUID hubId;
 		private UUID deliveryId;
 		private int quantity;
+		private int totalPrice;
 		private String requestDescription;
 	}
 
@@ -48,4 +50,6 @@ public class CreateOrderResponse {
 	public static class ProductInfo {
 		private UUID productId;
 	}
+
+
 }
